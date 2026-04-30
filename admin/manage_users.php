@@ -1,10 +1,14 @@
 <?php
-require_once __DIR__ . '/../includes/header.php';
-
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+session_start();
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
     header("Location: /share_hope/login.php");
     exit;
 }
+require_once __DIR__ . '/../includes/header.php';
+
+$criticalLockFile = __DIR__ . '/../.critical_update_lock';
+$has_role_level_col = (bool) $pdo->query("SHOW COLUMNS FROM users LIKE 'role_level'")->fetch();
+
 
 $error = '';
 $success = '';
@@ -13,18 +17,29 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf_token($_POST['csrf_token'] ?? '');
 
+    if (file_exists($criticalLockFile) && $_SESSION['user_role'] !== 'super_admin') {
+        $error = 'Critical update lock is enabled. User status changes are temporarily disabled.';
+    }
     $target_user_id = intval($_POST['user_id'] ?? 0);
     $action = $_POST['action'] ?? '';
 
-    if ($target_user_id === $_SESSION['user_id']) {
+    if (!empty($error)) {
+        // Locked by critical update mode.
+    } elseif ($target_user_id === $_SESSION['user_id']) {
         $error = "You cannot suspend yourself.";
     } elseif ($target_user_id > 0) {
         $new_status = ($action === 'suspend') ? 'suspended' : 'active';
+        if ($has_role_level_col) {
+            $rl_row = $pdo->query("SELECT COALESCE(role_level, 0) AS role_level FROM users WHERE id = " . (int)$target_user_id)->fetch();
+            if ($rl_row && (int)$rl_row['role_level'] >= 3) { $error = 'Protected account cannot be suspended or activated.'; }
+        }
+        if (empty($error)) {
         $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
         if ($stmt->execute([$new_status, $target_user_id])) {
             $success = "User status updated to: " . ucfirst($new_status);
         } else {
             $error = "Failed to update user status.";
+        }
         }
     }
 }
@@ -36,8 +51,8 @@ $users = $stmt->fetchAll();
 
 <div class="container" style="padding: 4rem 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
-        <h1 style="font-size: 2rem; margin: 0;">Manage Users</h1>
-        <a href="/share_hope/admin/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
+        <h1 style="font-size: 2rem; margin: 0;">Network Contributor Registry</h1>
+        <a href="/share_hope/admin/dashboard.php" class="btn btn-outline">Back to Hub</a>
     </div>
 
     <?php if ($error): ?>

@@ -2,13 +2,13 @@ CREATE DATABASE IF NOT EXISTS share_hope;
 USE share_hope;
 
 -- Drop tables if they exist to allow clean re-imports
-DROP TABLE IF EXISTS payments;
-DROP TABLE IF EXISTS donations;
-DROP TABLE IF EXISTS campaigns;
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS ngos;
-DROP TABLE IF EXISTS notifications;
-DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS payments;
+-- DROP TABLE IF EXISTS donations;
+-- DROP TABLE IF EXISTS campaigns;
+-- DROP TABLE IF EXISTS categories;
+-- DROP TABLE IF EXISTS ngos;
+-- DROP TABLE IF EXISTS notifications;
+-- DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,8 +60,8 @@ CREATE TABLE donations (
     campaign_id INT NOT NULL,
     donor_id INT,
     amount DECIMAL(15,2) NOT NULL,
-    payment_method ENUM('mpesa', 'card', 'bank') NOT NULL,
-    status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    payment_method ENUM('mpesa', 'card', 'bank', 'inkind') NOT NULL,
+    status ENUM('pending', 'completed', 'failed', 'pledged') DEFAULT 'pending',
     is_anonymous BOOLEAN DEFAULT FALSE,
     message TEXT,
     transaction_id VARCHAR(100),
@@ -80,6 +80,22 @@ CREATE TABLE payments (
     FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE CASCADE
 );
 
+CREATE TABLE inkind_donations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    campaign_id INT NOT NULL,
+    donor_id INT,
+    donor_name VARCHAR(255),
+    donor_email VARCHAR(255),
+    donor_phone VARCHAR(50),
+    item_category VARCHAR(100) NOT NULL,
+    item_description TEXT NOT NULL,
+    quantity VARCHAR(100) NOT NULL,
+    status ENUM('pledged', 'received', 'distributed') DEFAULT 'pledged',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE,
+    FOREIGN KEY (donor_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
 CREATE TABLE notifications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -87,6 +103,43 @@ CREATE TABLE notifications (
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id INT NOT NULL,
+    action VARCHAR(100) NOT NULL,
+    action_type ENUM('create', 'update', 'delete', 'approve', 'deny', 'suspend', 'export', 'login', 'other') DEFAULT 'other',
+    entity_type VARCHAR(50),
+    entity_id INT,
+    entity_name VARCHAR(255),
+    description TEXT,
+    old_value TEXT,
+    new_value TEXT,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX (admin_id, created_at),
+    INDEX (action_type, created_at)
+);
+
+CREATE TABLE campaign_updates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    campaign_id INT NOT NULL,
+    message TEXT NOT NULL,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE
+);
+
+CREATE TABLE announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    is_public BOOLEAN DEFAULT FALSE,
+    action_link VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert categories

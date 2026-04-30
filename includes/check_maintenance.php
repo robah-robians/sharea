@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $lockFile = __DIR__ . '/../.maintenance_lock';
 
 // Ensure admins can still log in and view the site to test updates
-$isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+$isAdmin = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'super_admin']);
 
 // Check if we are already on the maintenance page to prevent infinite redirects
 $current_page = basename($_SERVER['PHP_SELF']);
@@ -27,3 +27,4 @@ if (!file_exists($lockFile) && $current_page === 'maintenance.php') {
     header("Location: /share_hope/index.php");
     exit;
 }
+

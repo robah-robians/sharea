@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $lockFile = __DIR__ . '/.maintenance_lock';
 
 // If lockfile is gone, or if user is admin, redirect back to home
-$isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+$isAdmin = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'super_admin']);
 if (!file_exists($lockFile) || $isAdmin) {
     header("Location: /share_hope/index.php");
     exit;

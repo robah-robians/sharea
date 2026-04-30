@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /share_hope/admin/dashboard.php");
@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 verify_csrf_token($_POST['csrf_token'] ?? '');
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
     $_SESSION['error'] = "Unauthorized.";
     header("Location: /share_hope/login.php");
     exit;

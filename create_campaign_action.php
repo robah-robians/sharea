@@ -1,7 +1,7 @@
 <?php
 // actions/create_campaign_action.php
 session_start();
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /share_hope/ngo/dashboard.php");
@@ -44,7 +44,7 @@ if (empty($title) || $goal_amount <= 0 || empty($deadline) || empty($description
 // Handle image upload
 $image_url = null;
 if (!empty($_FILES['image']['name'])) {
-    $uploadDir = __DIR__ . 'assets/uploads/campaigns/';
+    $uploadDir = __DIR__ . '/../assets/uploads/campaigns/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }

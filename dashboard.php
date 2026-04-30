@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/includes/header.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
@@ -29,7 +30,7 @@ $donations = $stmt->fetchAll();
         <h1 style="font-size: 2rem; margin: 0;">Welcome, <?= h($_SESSION['user_name']) ?>!</h1>
         <div style="background: var(--surface); padding: 1rem 2rem; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
             <div style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase;">Total Impact Delivered</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: var(--secondary);"><i class="fa-solid fa-hand-holding-dollar"></i> KSh <?= number_format($total_donated, 2) ?></div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--secondary);"><i class="fa-solid fa-hand-holding-dollar"></i> $<?= number_format($total_donated, 2) ?></div>
         </div>
     </div>
 
@@ -63,7 +64,7 @@ $donations = $stmt->fetchAll();
                                 <td style="padding: 1rem 1.5rem; white-space: nowrap;"><?= date('M j, Y', strtotime($don['created_at'])) ?></td>
                                 <td style="padding: 1rem 1.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;"><?= h($don['title']) ?></td>
                                 <td style="padding: 1rem 1.5rem;"><?= h($don['ngo_name']) ?></td>
-                                <td style="padding: 1rem 1.5rem; font-weight: 600; color: var(--text-main);">KSh <?= number_format($don['amount'], 2) ?></td>
+                                <td style="padding: 1rem 1.5rem; font-weight: 600; color: var(--text-main);">$<?= number_format($don['amount'], 2) ?></td>
                                 <td style="padding: 1rem 1.5rem;">
                                     <a href="/share_hope/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i class="fa-solid fa-file-invoice"></i> View</a>
                                 </td>
@@ -76,4 +77,4 @@ $donations = $stmt->fetchAll();
     </div>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>

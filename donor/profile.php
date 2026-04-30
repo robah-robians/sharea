@@ -1,10 +1,11 @@
 <?php
-require_once __DIR__ . '/../includes/header.php';
-
+session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
     header("Location: /share_hope/login.php");
     exit;
 }
+require_once __DIR__ . '/../includes/header.php';
+
 
 $user_id = $_SESSION['user_id'];
 
@@ -92,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="form-group">
                 <label class="form-label" for="phone">Phone Number</label>
-                <input type="text" id="phone" name="phone" class="form-control" value="<?= h($user['phone']) ?>">
+                <input type="tel" id="phone" name="phone" class="form-control" value="<?= h($user['phone']) ?>" pattern="[0-9+\-\s()]{10,15}" title="Enter a valid phone number (10-15 digits)" placeholder="e.g., +254712345678">
+                <small style="color: var(--text-muted); display:block; margin-top: 0.25rem;">Format: +254712345678 or 0712345678</small>
             </div>
 
             <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">

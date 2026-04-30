@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/includes/header.php';
 ?>
 <div class="container" style="padding-top: 4rem; padding-bottom: 4rem;">

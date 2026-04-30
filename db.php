@@ -1,4 +1,5 @@
 <?php
+session_start();
 // includes/db.php
 $host = '127.0.0.1';
 $db   = 'share_hope';

@@ -1,11 +1,11 @@
-# SHARE HOPE: Project Overview & Developer Guide
+﻿# SHARE HOPE: Project Overview & Developer Guide
 
-## 🎯 What is Share Hope?
+## What is Share Hope?
 **Share Hope** is a comprehensive, secure, and modern web platform designed to bridge the gap between Non-Governmental Organizations (NGOs) and private donors in Kenya. 
 
 The primary aim of this platform is to foster **trust, transparency, and ease of use** in the charitable sector. It provides NGOs with a centralized digital space to showcase verified campaigns, while offering donors a secure, intuitive, and transparent environment to contribute financially to causes they care about.
 
-## 💡 Why was it Built?
+## Why was it Built?
 In many regions, donors hesitate to give because they cannot easily verify the legitimacy of a charity or see exactly where their money is going. **Share Hope** solves this by:
 1. **Verifying NGOs:** A strict Admin approval process ensures only legitimate organizations can create funding campaigns.
 2. **Interactive Transparency:** Utilizing interactive maps, detailed campaign pages, and progress bars to show real-time impact.
@@ -13,8 +13,7 @@ In many regions, donors hesitate to give because they cannot easily verify the l
 
 ---
 
-## 🚀 Implemented Features Architecture
-
+## Implemented Features Architecture
 ### 1. User Roles & Access Control (RBAC)
 *   **Donors:** Can browse campaigns, securely donate, download PDF receipts, and track their giving history on a personal dashboard.
 *   **NGOs:** Must be verified. Once approved, they can create campaigns, set funding goals, track progress, and export their donor data securely via CSV.
@@ -45,10 +44,18 @@ In many regions, donors hesitate to give because they cannot easily verify the l
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 This platform is a bespoke, lightweight, and incredibly fast application built *without* heavy external frameworks.
 *   **Frontend:** HTML5, pure CSS3 (custom dynamic variables), Vanilla Javascript.
 *   **Backend:** PHP (PDO).
 *   **Database:** MySQL (Relational).
 
 > *Note to Developer: This overview serves as your "True North." As you continue to scale Share Hope, refer back to the core aims of Trust, Transparency, and Security outlined in this document.*
+
+---
+## Latest Update Snapshot (March 2026)
+- Announcements moderation: hide/restore, withdraw/publish, and super-admin delete.
+- Donations ledger moderation: hide/restore, flag/unflag, void/unvoid.
+- Additional admin modules: activity logs, operations, reports, exports, and password reset utility.
+- Responsive admin UI improvements for smaller screens/mobile.
+- Stack in use: PHP (PDO), MySQL/MariaDB, HTML/CSS/JavaScript.

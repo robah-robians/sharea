@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/db.php';
 session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
     header("Location: /share_hope/login.php");
     exit;
 }

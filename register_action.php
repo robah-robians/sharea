@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/security.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /share_hope/register.php");
@@ -23,8 +24,9 @@ if (empty($name) || empty($email) || empty($password)) {
     exit;
 }
 
-if (strlen($password) < 8) {
-    $_SESSION['error'] = "Password must be at least 8 characters long.";
+$password_check = validate_password_strength($password);
+if (!$password_check['valid']) {
+    $_SESSION['error'] = implode("<br>", $password_check['errors']);
     header("Location: /share_hope/register.php?role=$role");
     exit;
 }
@@ -62,7 +64,7 @@ try {
             throw new Exception("Mission and Verification doc are required for NGOs.");
         }
         
-        $uploadDir = __DIR__ . 'assets/uploads/docs/';
+        $uploadDir = __DIR__ . '/../assets/uploads/docs/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }

@@ -54,12 +54,12 @@ if (!empty($_FILES['update_image']['name'])) {
 }
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO campaign_updates (campaign_id, message, image_url) VALUES (?, ?, ?)");
-    $stmt->execute([$campaign_id, $message, $image_url]);
-    $_SESSION['success'] = "Impact update posted successfully!";
+    $stmt = $pdo->prepare("INSERT INTO campaign_updates (campaign_id, message, image_url, status, submitted_by) VALUES (?, ?, ?, 'pending', ?)");
+    $stmt->execute([$campaign_id, $message, $image_url, $_SESSION['user_id']]);
+    $_SESSION['success'] = "Update submitted for admin review. It will appear publicly once approved.";
 } catch (Exception $e) {
-    $_SESSION['error'] = "Failed to post update: " . $e->getMessage();
+    $_SESSION['error'] = "Failed to submit update: " . $e->getMessage();
 }
 
-header("Location: /share_hope/ngo/edit_campaign.php?id=" . $campaign_id);
+header("Location: /share_hope/ngo/dashboard.php");
 exit;

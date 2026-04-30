@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/security.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /share_hope/login.php");
@@ -18,10 +19,24 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
+if (!check_login_rate_limit($pdo, $email)) {
+    $_SESSION['error'] = "Too many login attempts. Please try again in 15 minutes.";
+    header("Location: /share_hope/login.php");
+    exit;
+}
+
 try {
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
+
+    if ($user) {
+        if (is_account_locked($pdo, $user['id'])) {
+            $_SESSION['error'] = "Account locked due to too many failed attempts. Try again in 30 minutes.";
+            header("Location: /share_hope/login.php");
+            exit;
+        }
+    }
 
     if ($user && password_verify($password, $user['password_hash'])) {
         if ($user['status'] === 'suspended') {
@@ -31,6 +46,9 @@ try {
         }
 
         // Login success
+        reset_failed_login_attempts($pdo, $user['id']);
+        log_login_attempt($pdo, $email, true, $user['id']);
+        
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_name'] = $user['name'];
@@ -45,7 +63,18 @@ try {
         }
         exit;
     } else {
-        $_SESSION['error'] = "Invalid email or password.";
+        if ($user) {
+            $lock_status = handle_failed_login($pdo, $user['id']);
+            if ($lock_status === 'locked') {
+                $_SESSION['error'] = "Account locked due to too many failed attempts. Try again in 30 minutes.";
+            } else {
+                $_SESSION['error'] = "Invalid email or password.";
+            }
+            log_login_attempt($pdo, $email, false, $user['id']);
+        } else {
+            $_SESSION['error'] = "Invalid email or password.";
+            log_login_attempt($pdo, $email, false, null);
+        }
         header("Location: /share_hope/login.php");
         exit;
     }

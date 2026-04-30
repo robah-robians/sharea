@@ -17,42 +17,39 @@ $is_anonymous = isset($_POST['is_anonymous']) ? 1 : 0;
 // Donor ID logic, null if not logged in
 $donor_id = $_SESSION['user_id'] ?? null;
 
-$mpesa_phone = trim($_POST['mpesa_phone'] ?? '');
-
-if ($amount <= 0 || !in_array($payment_method, ['mpesa', 'card', 'bank'])) {
-    $_SESSION['error'] = "Invalid donation amount or payment method.";
+if ($payment_method !== 'inkind' && $amount <= 0) {
+    $_SESSION['error'] = "Invalid donation amount.";
     header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
     exit;
 }
 
-if ($payment_method === 'mpesa') {
-    if (empty($mpesa_phone)) {
-        $_SESSION['error'] = "Please enter an M-Pesa phone number.";
-        header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
-        exit;
-    }
-
-    $_SESSION['pending_donation'] = [
-        'campaign_id' => $campaign_id,
-        'amount' => $amount,
-        'payment_method' => 'mpesa',
-        'is_anonymous' => $is_anonymous,
-        'message' => $message,
-        'donor_id' => $donor_id,
-        'mpesa_phone' => $mpesa_phone
-    ];
-
-    header("Location: /share_hope/mpesa_processing.php");
+if (!in_array($payment_method, ['mpesa', 'card', 'bank', 'inkind'])) {
+    $_SESSION['error'] = "Invalid payment method.";
+    header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
     exit;
 }
 
 try {
     $pdo->beginTransaction();
 
-    // Verify campaign existence
-    $stmt = $pdo->prepare("SELECT * FROM campaigns WHERE id = ?");
-    $stmt->execute([$campaign_id]);
-    $campaign = $stmt->fetch();
+    // Verify campaign existence and fetch NGO owner user_id for notifications
+    $campaign_type = $_POST['campaign_type'] ?? 'regular';
+    
+    if ($campaign_type === 'awareness') {
+        // For awareness campaigns, we'll create a donation record but link it to a special admin campaign
+        $stmt = $pdo->prepare("SELECT ac.*, 1 as user_id FROM awareness_campaigns ac WHERE ac.id = ?");
+        $stmt->execute([$campaign_id]);
+        $campaign = $stmt->fetch();
+        
+        if ($campaign) {
+            $campaign['title'] = $campaign['title'];
+            $campaign['user_id'] = 1; // Admin user ID for notifications
+        }
+    } else {
+        $stmt = $pdo->prepare("SELECT c.*, n.user_id FROM campaigns c LEFT JOIN ngos n ON c.ngo_id = n.id WHERE c.id = ?");
+        $stmt->execute([$campaign_id]);
+        $campaign = $stmt->fetch();
+    }
 
     if (!$campaign) {
         throw new Exception("Campaign not found.");
@@ -63,29 +60,34 @@ try {
     $gateway_status = 'success'; // Stubbed as always success for demonstration
 
     // Insert Donation record
-    $stmt = $pdo->prepare("INSERT INTO donations (campaign_id, donor_id, amount, payment_method, status, is_anonymous, message, transaction_id) VALUES (?, ?, ?, ?, 'completed', ?, ?, ?)");
-    $stmt->execute([$campaign_id, $donor_id, $amount, $payment_method, $is_anonymous, $message, $transaction_id]);
+    $status = $payment_method === 'inkind' ? 'pledged' : 'completed';
+    $stmt = $pdo->prepare("INSERT INTO donations (campaign_id, donor_id, amount, payment_method, status, is_anonymous, message, transaction_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$campaign_id, $donor_id, $amount, $payment_method, $status, $is_anonymous, $message, $transaction_id]);
     $donation_id = $pdo->lastInsertId();
 
     // Insert Payment Log
     $stmt = $pdo->prepare("INSERT INTO payments (donation_id, payment_gateway, payment_status, gateway_response) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$donation_id, $payment_method, $gateway_status, '{"mock_response":"Payment verified successfully"}']);
+    $stmt->execute([$donation_id, $payment_method, $gateway_status, '{"mock_response":"Payment/Pledge verified successfully"}']);
 
-    // Update Campaign Current Amount safely using transaction
-    $stmt = $pdo->prepare("UPDATE campaigns SET current_amount = current_amount + ? WHERE id = ?");
-    $stmt->execute([$amount, $campaign_id]);
+    // Update Campaign Current Amount safely using transaction (only if not a pledge/inkind and not awareness campaign)
+    if ($payment_method !== 'inkind' && $campaign_type !== 'awareness') {
+        $stmt = $pdo->prepare("UPDATE campaigns SET current_amount = current_amount + ? WHERE id = ?");
+        $stmt->execute([$amount, $campaign_id]);
+    }
 
     // Send Notification to Donor
     if ($donor_id) {
-        $donor_msg = "Your donation of KSh " . number_format($amount, 2) . " to " . $campaign['title'] . " was successful. Thank you!";
+        $donor_msg = "Your donation of $" . number_format($amount, 2) . " to " . $campaign['title'] . " was successful. Thank you!";
         $stmt = $pdo->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
         $stmt->execute([$donor_id, $donor_msg]);
     }
 
-    // Send Notification to NGO
-    $ngo_msg = "You received a new " . strtolower($payment_method) . " donation of KSh " . number_format($amount, 2) . " for your campaign: " . $campaign['title'];
-    $stmt = $pdo->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
-    $stmt->execute([$campaign['user_id'], $ngo_msg]);
+    // Send Notification to NGO owner (only if campaign is linked to an NGO)
+    if (!empty($campaign['user_id'])) {
+        $ngo_msg = "You received a new " . strtolower($payment_method) . " donation of $" . number_format($amount, 2) . " for your campaign: " . $campaign['title'];
+        $stmt = $pdo->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
+        $stmt->execute([$campaign['user_id'], $ngo_msg]);
+    }
 
     $pdo->commit();
 

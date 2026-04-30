@@ -33,8 +33,8 @@ if (empty($quantity) || empty($item_description) || empty($item_category)) {
 try {
     $pdo->beginTransaction();
 
-    // Verify campaign exists
-    $stmt = $pdo->prepare("SELECT title, user_id FROM campaigns c JOIN ngos n ON c.ngo_id = n.id WHERE c.id = ?");
+    // Verify campaign exists and get NGO user ID
+    $stmt = $pdo->prepare("SELECT c.title, n.user_id FROM campaigns c JOIN ngos n ON c.ngo_id = n.id WHERE c.id = ?");
     $stmt->execute([$campaign_id]);
     $campaign = $stmt->fetch();
 
@@ -56,7 +56,7 @@ try {
     ]);
 
     // Notify NGO
-    $ngo_msg = "New In-Kind Pledge Received: A donor pledged $quantity of $item_category for your campaign '" . $campaign['title'] . "'. Check your dashboard to contact them.";
+    $ngo_msg = "New In-Kind Pledge Received: A donor pledged " . $quantity . " of " . $item_category . " for your campaign '" . $campaign['title'] . "'. Check your dashboard to contact them.";
     $stmt = $pdo->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
     $stmt->execute([$campaign['user_id'], $ngo_msg]);
 

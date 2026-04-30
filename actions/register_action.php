@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/security.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /share_hope/register.php");
@@ -23,14 +24,23 @@ if (empty($name) || empty($email) || empty($password)) {
     exit;
 }
 
-if (strlen($password) < 8) {
-    $_SESSION['error'] = "Password must be at least 8 characters long.";
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $_SESSION['error'] = "Invalid email format.";
     header("Location: /share_hope/register.php?role=$role");
     exit;
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['error'] = "Invalid email format.";
+// Validate phone number if provided
+if (!empty($phone) && !preg_match('/^[0-9+\-\s()]{10,15}$/', $phone)) {
+    $_SESSION['error'] = "Invalid phone number format. Use 10-15 digits with optional +, -, spaces, or parentheses.";
+    header("Location: /share_hope/register.php?role=$role");
+    exit;
+}
+
+// Validate password strength
+$pwd_validation = validate_password_strength($password);
+if (!$pwd_validation['valid']) {
+    $_SESSION['error'] = implode("<br>", $pwd_validation['errors']);
     header("Location: /share_hope/register.php?role=$role");
     exit;
 }
@@ -49,10 +59,10 @@ try {
     }
 
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
-    $status = 'active'; // Admin could suspend later
-
-    // Insert User
-    $stmt = $pdo->prepare("INSERT INTO users (role, name, email, phone, password_hash, status) VALUES (?, ?, ?, ?, ?, ?)");
+    $status = 'active';
+    
+    // Insert User - email_verified defaults to 0
+    $stmt = $pdo->prepare("INSERT INTO users (role, name, email, phone, password_hash, status, email_verified) VALUES (?, ?, ?, ?, ?, ?, 0)");
     $stmt->execute([$role, $name, $email, $phone, $password_hash, $status]);
     $user_id = $pdo->lastInsertId();
 
@@ -61,39 +71,43 @@ try {
         if (empty($mission) || empty($_FILES['verification_doc']['name'])) {
             throw new Exception("Mission and Verification doc are required for NGOs.");
         }
-
+        
         $uploadDir = __DIR__ . '/../assets/uploads/docs/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
-
+        
         $fileInfo = pathinfo($_FILES['verification_doc']['name']);
         $ext = strtolower($fileInfo['extension']);
         if (!in_array($ext, ['pdf', 'jpg', 'jpeg', 'png'])) {
             throw new Exception("Invalid file type. Only PDF or Images allowed.");
         }
-
+        
         $newFilename = uniqid('doc_') . '.' . $ext;
         $destination = $uploadDir . $newFilename;
         $dbFilePath = '/assets/uploads/docs/' . $newFilename;
-
+        
         if (!move_uploaded_file($_FILES['verification_doc']['tmp_name'], $destination)) {
             throw new Exception("Failed to upload verification document.");
         }
-
+        
         $stmt = $pdo->prepare("INSERT INTO ngos (user_id, mission, verification_doc) VALUES (?, ?, ?)");
         $stmt->execute([$user_id, $mission, $dbFilePath]);
     }
 
+    // Generate verification token and send email
+    // TEMPORARILY DISABLED FOR TESTING - ENABLE LATER
+    // $token = generate_verification_token($pdo, $user_id);
+    // if ($token) {
+    //     send_verification_email($email, $name, $token);
+    // }
+    
+    // TESTING: Auto-verify email on registration
+    $stmt = $pdo->prepare("UPDATE users SET email_verified = 1 WHERE id = ?");
+    $stmt->execute([$user_id]);
+
     $pdo->commit();
-
-    // Send Welcome Email
-    require_once __DIR__ . '/../includes/mailer.php';
-    $subject = "Welcome to Share Hope, " . htmlspecialchars($name) . "!";
-    $body = "Hi $name,\n\nWelcome to Share Hope! We are thrilled to have you join our community as a " . ucfirst($role) . ".\n\nTogether, we can make a difference.\n\nBest,\nThe Share Hope Team";
-    send_mock_email($email, $subject, $body);
-
-    $_SESSION['success'] = "Registration successful. Please log in.";
+    $_SESSION['success'] = "Registration successful! You can now log in.";
     header("Location: /share_hope/login.php");
     exit;
 

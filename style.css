@@ -1,17 +1,17 @@
 /* assets/css/style.css */
 :root {
-    --primary: #4F46E5; /* Indigo */
-    --primary-hover: #4338CA;
-    --secondary: #10B981; /* Emerald */
-    --accent: #F59E0B; /* Amber */
-    --background: #F8FAFC; /* Slate 50 */
-    --surface: #FFFFFF;
-    --text-main: #0F172A; /* Slate 900 */
+    --primary: #2563EB; /* Primary / Info */
+    --primary-hover: #1E40AF;
+    --secondary: #16A34A; /* Success */
+    --accent: #D97706; /* Warning */
+    --info: #2563EB;
+    --success: #16A34A;
+    --warning: #D97706;
     --text-muted: #64748B; /* Slate 500 */
     --border: #E2E8F0; /* Slate 200 */
-    --danger: #EF4444; /* Red 500 */
+    --text-muted: #475569; /* Better mobile contrast */
     
-    --radius-sm: 6px;
+    --danger: #DC2626; /* Danger */
     --radius-md: 12px;
     --radius-lg: 20px;
     
@@ -26,7 +26,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', sans-serif;
     background-color: var(--background);
     color: var(--text-main);
     line-height: 1.6;
@@ -302,4 +302,22 @@ img { max-width: 100%; height: auto; display: block; }
     .hero h1 { font-size: 2.5rem; }
     .hero-stats { flex-direction: column; gap: 1.5rem; }
     .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* Semantic color + token overrides (March 2026) */
+:root {
+    --primary: #2563EB;
+    --primary-hover: #1E40AF;
+    --info: #2563EB;
+    --secondary: #16A34A;
+    --success: #16A34A;
+    --accent: #D97706;
+    --warning: #D97706;
+    --danger: #DC2626;
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+    --text-main: #0F172A;
+    --text-muted: #475569;
+    --border: #E2E8F0;
+    --radius-sm: 6px;
 }

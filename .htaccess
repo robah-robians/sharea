@@ -1,0 +1,10 @@
+DirectoryIndex index.php
+
+# Ensure homepage always loads index.php
+RewriteEngine On
+
+# Force homepage to always load index.php
+RewriteRule ^$ index.php [L]
+
+# Prevent direct access to dashboard.php in root (it should be in role-specific folders)
+RewriteRule ^dashboard\.php$ index.php [R=301,L]

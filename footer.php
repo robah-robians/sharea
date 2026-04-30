@@ -7,7 +7,7 @@
                 </a>
                 <p>Empowering NGOs and donors to create real, transparent change globally. Join us in making a difference.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
                     <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
                 </div>
