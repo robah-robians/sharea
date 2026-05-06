@@ -5,7 +5,7 @@ require_once __DIR__ . '/includes/header.php';
 $token = $_GET['token'] ?? '';
 if (empty($token)) {
     $_SESSION['error'] = "Invalid or missing password reset token.";
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 ?>
@@ -23,7 +23,7 @@ if (empty($token)) {
             </div>
         <?php endif; ?>
 
-        <form action="/share_hope/actions/reset_password_action.php" method="POST">
+        <form action="<?= BASE_URL ?>/actions/reset_password_action.php" method="POST">
             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
             <input type="hidden" name="token" value="<?= h($token) ?>">
 

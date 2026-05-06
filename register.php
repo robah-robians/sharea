@@ -26,7 +26,7 @@ if (!in_array($role, ['donor', 'ngo'])) {
             <a href="register.php?role=ngo" class="btn <?= $role === 'ngo' ? 'btn-primary' : 'btn-outline' ?>" style="flex:1; background: <?= $role === 'ngo' ? 'linear-gradient(135deg, var(--primary), var(--accent))' : 'transparent' ?>; border: <?= $role === 'ngo' ? 'none' : '2px solid var(--primary)' ?>;">NGO</a>
         </div>
 
-        <form action="/share_hope/actions/register_action.php" method="POST" enctype="multipart/form-data">
+        <form action="<?= BASE_URL ?>/actions/register_action.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
             <input type="hidden" name="role" value="<?= h($role) ?>">
             
@@ -68,7 +68,7 @@ if (!in_array($role, ['donor', 'ngo'])) {
 
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; box-shadow: 0 4px 14px rgba(0, 102, 255, 0.39);">Register</button>
             <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">
-                Already have an account? <a href="/share_hope/login.php" class="text-primary" style="font-weight: 500;">Log in here</a>.
+                Already have an account? <a href="<?= BASE_URL ?>/login.php" class="text-primary" style="font-weight: 500;">Log in here</a>.
             </p>
         </form>
         </div>

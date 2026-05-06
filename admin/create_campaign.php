@@ -5,7 +5,7 @@ session_start();
 // Auth Check
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     $_SESSION['error'] = "Access denied. Admin login required.";
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -15,7 +15,7 @@ $stmt = $pdo->query("SELECT * FROM categories ORDER BY name ASC");
 $categories = $stmt->fetchAll();
 ?>
 
-<div class="container" style="padding: 4rem 0;">
+<div class="container" style="padding: 2.5rem 0;">
     <div style="max-width: 800px; margin: 0 auto; background: var(--surface); padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border);">
         <h2 style="margin-bottom: 2rem;">Deploy New Initiative</h2>
         
@@ -26,7 +26,7 @@ $categories = $stmt->fetchAll();
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-        <form action="/share_hope/actions/create_campaign_action.php" method="POST" enctype="multipart/form-data">
+        <form action="<?= BASE_URL ?>/actions/create_campaign_action.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
             
             <div class="form-group">
@@ -82,7 +82,7 @@ $categories = $stmt->fetchAll();
             </div>
 
             <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                <a href="/share_hope/admin/dashboard.php" class="btn btn-outline">Cancel</a>
+                <a href="<?= BASE_URL ?>/admin/dashboard.php" class="btn btn-outline">Cancel</a>
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-bullhorn"></i> Deploy Initiative</button>
             </div>
         </form>

@@ -7,12 +7,12 @@ require_once __DIR__ . "/../includes/db.php";
 require_once __DIR__ . "/../includes/activity_logger.php";
 
 if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["user_role"] ?? "", ["admin", "super_admin"], true)) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: /share_hope/admin/announcements.php");
+    header("Location: " . BASE_URL . "/admin/announcements.php");
     exit;
 }
 
@@ -23,7 +23,7 @@ $allowedActions = ["hide", "restore", "withdraw", "publish", "delete"];
 
 if ($announcementId <= 0 || !in_array($action, $allowedActions, true)) {
     $_SESSION["error"] = "Invalid announcement moderation request.";
-    header("Location: /share_hope/admin/announcements.php");
+    header("Location: " . BASE_URL . "/admin/announcements.php");
     exit;
 }
 
@@ -33,7 +33,7 @@ $announcement = $stmt->fetch();
 
 if (!$announcement) {
     $_SESSION["error"] = "Announcement not found.";
-    header("Location: /share_hope/admin/announcements.php");
+    header("Location: " . BASE_URL . "/admin/announcements.php");
     exit;
 }
 
@@ -75,7 +75,7 @@ switch ($action) {
         // Allow both admin and super_admin to delete announcements
         if (!in_array($adminRole, ["admin", "super_admin"], true)) {
             $_SESSION["error"] = "Only administrators can delete announcements.";
-            header("Location: /share_hope/admin/announcements.php");
+            header("Location: " . BASE_URL . "/admin/announcements.php");
             exit;
         }
         $pdo->prepare("DELETE FROM announcements WHERE id = ?")->execute([$announcementId]);
@@ -96,5 +96,5 @@ log_admin_activity(
     $description
 );
 
-header("Location: /share_hope/admin/announcements.php");
+header("Location: " . BASE_URL . "/admin/announcements.php");
 exit;

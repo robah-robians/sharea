@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -49,10 +49,10 @@ $stmt = $pdo->query("SELECT * FROM users ORDER BY created_at DESC");
 $users = $stmt->fetchAll();
 ?>
 
-<div class="container" style="padding: 4rem 0;">
+<div class="container" style="padding: 2.5rem 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
         <h1 style="font-size: 2rem; margin: 0;">Network Contributor Registry</h1>
-        <a href="/share_hope/admin/dashboard.php" class="btn btn-outline">Back to Hub</a>
+        <a href="<?= BASE_URL ?>/admin/dashboard.php" class="btn btn-outline">Back to Hub</a>
     </div>
 
     <?php if ($error): ?>

@@ -6,6 +6,14 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
     exit;
 }
 
+// RBAC Enforcement: Assistant Admins (Level 1) cannot perform write actions
+if (($_SESSION['role_level'] ?? 1) < 2) {
+    $_SESSION['error'] = 'Unauthorized action. Assistant Admins have read-only access.';
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/dashboard.php'));
+    exit;
+}
+
+
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/security.php';
 require_once __DIR__ . '/../includes/activity_logger.php';

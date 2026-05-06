@@ -6,7 +6,7 @@ require_once __DIR__ . '/includes/header.php';
 $message_id = intval($_GET['id'] ?? 0);
 
 if ($message_id <= 0) {
-    header("Location: /share_hope/index.php");
+    header("Location: " . BASE_URL . "/index.php");
     exit;
 }
 
@@ -16,7 +16,7 @@ $stmt->execute([$message_id]);
 $message = $stmt->fetch();
 
 if (!$message) {
-    header("Location: /share_hope/index.php");
+    header("Location: " . BASE_URL . "/index.php");
     exit;
 }
 
@@ -36,7 +36,7 @@ $related = $stmt->fetchAll();
     <div class="container" style="max-width: 900px;">
         
         <!-- Back Button -->
-        <a href="/share_hope/index.php" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 2rem;">
+        <a href="<?= BASE_URL ?>/index.php" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 2rem;">
             <i class="fa-solid fa-arrow-left"></i> Back to Home
         </a>
 
@@ -101,7 +101,7 @@ $related = $stmt->fetchAll();
                 <h3 style="margin: 0 0 1.5rem 0; font-size: 1rem; font-weight: 700;">Related Messages</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
                     <?php foreach ($related as $rel): ?>
-                        <a href="/share_hope/message_detail.php?id=<?= $rel['id'] ?>" style="text-decoration: none; display: block; padding: 1.25rem; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius-md); transition: all 0.3s;" onmouseover="this.style.boxShadow='var(--shadow-md)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
+                        <a href="<?= BASE_URL ?>/message_detail.php?id=<?= $rel['id'] ?>" style="text-decoration: none; display: block; padding: 1.25rem; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius-md); transition: all 0.3s;" onmouseover="this.style.boxShadow='var(--shadow-md)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
                             <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">
                                 <?= h(mb_substr($rel['title'], 0, 50)) ?>
                             </h4>

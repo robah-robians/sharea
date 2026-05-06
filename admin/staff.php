@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 $criticalLockFile = __DIR__ . '/../.critical_update_lock';
@@ -103,13 +103,13 @@ $staff = $pdo->query("
     $order_sql
 ")->fetchAll();
 
-// Get potential candidates for promotion (donors)
+// Get potential candidates for promotion (donors + NGOs)
 $donors = $pdo->query("
-    SELECT id, name, email, created_at
+    SELECT id, name, email, role, created_at
     FROM users
-    WHERE role = 'donor'
-    ORDER BY name ASC
-    LIMIT 50
+    WHERE role IN ('donor', 'ngo')
+    ORDER BY role ASC, name ASC
+    LIMIT 100
 ")->fetchAll();
 
 // Role information
@@ -141,7 +141,7 @@ $roles = [
 
 <?php require_once __DIR__ . '/../includes/header.php'; ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
 
@@ -277,10 +277,10 @@ $roles = [
                     <div style="margin-bottom: 1.5rem;">
                         <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;"><i class="fa-solid fa-user"></i> Select User *</label>
                         <select name="user_id" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-md); font-family: inherit; font-size: inherit;">
-                            <option value="">-- Choose a donor to promote --</option>
+                            <option value="">-- Choose a user to promote --</option>
                             <?php foreach ($donors as $donor): ?>
                             <option value="<?= $donor['id'] ?>">
-                                <?= h($donor['name']) ?> (<?= h($donor['email']) ?>)  Joined <?= date('M Y', strtotime($donor['created_at'])) ?>
+                                [<?= strtoupper(h($donor['role'])) ?>] <?= h($donor['name']) ?> (<?= h($donor['email']) ?>) — Joined <?= date('M Y', strtotime($donor['created_at'])) ?>
                             </option>
                             <?php endforeach; ?>
                         </select>

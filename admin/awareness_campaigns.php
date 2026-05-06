@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                 $filename = 'awareness_' . time() . '_' . uniqid() . '.' . $ext;
                 if (move_uploaded_file($_FILES['campaign_image']['tmp_name'], $upload_dir . $filename)) {
-                    $image_url = '/share_hope/assets/uploads/images/' . $filename;
+                    $image_url = BASE_URL . '/assets/uploads/images/' . $filename;
                 }
             }
         }
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         ]);
         log_admin_activity($pdo, $_SESSION['user_id'], "Create awareness campaign", 'create', 'awareness_campaign', $pdo->lastInsertId(), null, "Admin created awareness campaign: {$_POST['title']}");
         $_SESSION['success'] = "Awareness campaign launched successfully.";
-        header("Location: /share_hope/admin/awareness_campaigns.php?tab=list");
+        header("Location: " . BASE_URL . "/admin/awareness_campaigns.php?tab=list");
         exit;
     } catch (PDOException $e) {
         $_SESSION['error'] = "Database error: " . $e->getMessage();
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['campaign_action'])) {
     } catch (PDOException $e) {
         $_SESSION['error'] = "Operation failed: " . $e->getMessage();
     }
-    header("Location: /share_hope/admin/awareness_campaigns.php?tab=list");
+    header("Location: " . BASE_URL . "/admin/awareness_campaigns.php?tab=list");
     exit;
 }
 
@@ -86,7 +86,7 @@ $stats = $pdo->query("
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
 
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
@@ -215,7 +215,7 @@ require_once __DIR__ . '/../includes/header.php';
                                             </td>
                                             <td style="padding: 1.25rem 1.5rem; text-align: right;">
                                                 <div style="display: flex; gap: 0.4rem; justify-content: flex-end; flex-wrap: wrap;">
-                                                    <a href="/share_hope/admin/edit_awareness_campaign.php?id=<?= $camp['id'] ?>" class="btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.72rem;" title="Edit">
+                                                    <a href="<?= BASE_URL ?>/admin/edit_awareness_campaign.php?id=<?= $camp['id'] ?>" class="btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.72rem;" title="Edit">
                                                         <i class="fa-solid fa-pen-to-square"></i> Edit
                                                     </a>
                                                     <form method="POST" style="display:inline;">

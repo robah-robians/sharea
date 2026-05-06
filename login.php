@@ -55,7 +55,7 @@ require_once __DIR__ . '/includes/header.php';
 
             <button type="submit" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; box-shadow: 0 4px 14px rgba(0, 102, 255, 0.39);">Log In</button>
             <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">
-                Don't have an account? <a href="/share_hope/register.php" class="text-primary" style="font-weight: 500;">Register
+                Don't have an account? <a href="<?= BASE_URL ?>/register.php" class="text-primary" style="font-weight: 500;">Register
                     here</a>.
             </p>
         </form>

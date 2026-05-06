@@ -26,7 +26,7 @@ require_once __DIR__ . '/includes/header.php';
             <i class="fa-solid fa-bullseye" style="font-size: 1.5rem; color: var(--primary);"></i>
         </div>
         <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Our Mission</h2>
-        <p style="color: var(--text-muted); line-height: 1.6;">SHARE HOPE is the trusted intermediary that ensures complete transparency and accountability. We verify NGOs, manage campaigns, and guarantee that every donation reaches its intended purpose with full traceability and integrity.</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">SHARE HOPE is the trusted intermediary that ensures complete transparency and accountability. Our mission is to provide donors with absolute peace of mind, allowing you to give freely without major concerns. We verify and partner exclusively with registered NGOs to manage campaigns, guaranteeing that every donation reaches its intended purpose—providing vital relief to the needy and supporting communities during crises and pandemics.</p>
     </div>
 
     <div style="background: var(--surface); padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border-top: 4px solid transparent; background-image: linear-gradient(var(--surface), var(--surface)), linear-gradient(135deg, var(--secondary), var(--accent)); background-origin: border-box; background-clip: padding-box, border-box; transition: transform 0.3s, box-shadow 0.3s;"
@@ -36,9 +36,7 @@ require_once __DIR__ . '/includes/header.php';
             <i class="fa-solid fa-eye" style="font-size: 1.5rem; color: var(--secondary);"></i>
         </div>
         <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Our Vision</h2>
-        <p style="color: var(--text-muted); line-height: 1.6;">A world where every act of kindness is amplified, where
-            charitable giving is completely fraud-free, and where the impact of every single dollar can be visibly
-            traced and celebrated.</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">A world where every act of kindness is amplified and charitable giving is completely secure and fraud-free. We envision a platform where donors can effortlessly rely on our core values of transparency and integrity, allowing the real-world impact of every single dollar to be visibly traced and celebrated alongside our trusted NGO partners.</p>
     </div>
 </section>
 
@@ -102,9 +100,9 @@ require_once __DIR__ . '/includes/header.php';
             style="color: rgba(255,255,255,0.9); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
             Join thousands of donors and NGOs already using Share Hope to change lives across the world.</p>
         <div style="display: flex; gap: 1rem; justify-content: center;">
-            <a href="/share_hope/campaigns.php" class="btn btn-primary"
+            <a href="<?= BASE_URL ?>/campaigns.php" class="btn btn-primary"
                 style="font-size: 1.125rem; padding: 0.75rem 2rem; background: rgba(255,255,255,0.2); border: 2px solid white; color: white; box-shadow: none;">Browse Campaigns</a>
-            <a href="/share_hope/register.php" class="btn btn-outline"
+            <a href="<?= BASE_URL ?>/register.php" class="btn btn-outline"
                 style="font-size: 1.125rem; padding: 0.75rem 2rem; background: white; color: var(--primary); border: none;">Register Now</a>
         </div>
     </div>

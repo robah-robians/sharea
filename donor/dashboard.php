@@ -3,7 +3,7 @@ session_start();
 
 // Check authentication first
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -16,7 +16,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 // Verify session is still valid after header inclusion
 if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] !== $user_id) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -51,7 +51,7 @@ if (!$latest_announcement) {
         'title' => 'System Maintenance Update',
         'message' => 'We will be performing scheduled maintenance on our servers this weekend. Some features may be temporarily unavailable.',
         'created_at' => date('Y-m-d H:i:s'),
-        'action_link' => '/share_hope/campaigns.php'
+        'action_link' => BASE_URL . '/campaigns.php'
     ];
 }
 ?>
@@ -108,7 +108,7 @@ if (!$latest_announcement) {
                 <h4 style="margin: 0 0 1rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-main);">Donation History</h4>
                 <h5 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; font-weight: 600; color: var(--text-muted);">No Donations Yet</h5>
                 <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1rem; line-height: 1.6; max-width: 400px; margin-left: auto; margin-right: auto;">Start making a difference by supporting campaigns you care about.</p>
-                <a href="/share_hope/campaigns.php" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 600;">Find Campaigns</a>
+                <a href="<?= BASE_URL ?>/campaigns.php" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 600;">Find Campaigns</a>
             </div>
         <?php else: ?>
             <div style="overflow-x: auto;">
@@ -118,7 +118,7 @@ if (!$latest_announcement) {
                             style="border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 0.875rem; background: var(--background);">
                             <th style="padding: 1rem 1.5rem;">Date</th>
                             <th style="padding: 1rem 1.5rem;">Initiative</th>
-                            <th style="padding: 1rem 1.5rem;">Field Node</th>
+                            <th style="padding: 1rem 1.5rem;">Partner NGO</th>
                             <th style="padding: 1rem 1.5rem;">Amount</th>
                             <th style="padding: 1rem 1.5rem;">Receipt</th>
                         </tr>
@@ -137,7 +137,7 @@ if (!$latest_announcement) {
                                 <td style="padding: 1rem 1.5rem; font-weight: 600; color: var(--text-main);">
                                     $<?= number_format($don['amount'], 2) ?></td>
                                 <td style="padding: 1rem 1.5rem;">
-                                    <a href="/share_hope/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline"
+                                    <a href="<?= BASE_URL ?>/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline"
                                         style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i
                                             class="fa-solid fa-file-invoice"></i> View</a>
                                 </td>
@@ -148,7 +148,7 @@ if (!$latest_announcement) {
             </div>
             <?php if (count($donations) >= 5): ?>
                 <div style="padding: 1rem; border-top: 1px solid var(--border); text-align: center; background: var(--background);">
-                    <a href="/share_hope/donor/donations.php" class="btn btn-text" style="font-weight: 600; color: var(--primary);">View All Donations <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+                    <a href="<?= BASE_URL ?>/donor/donations.php" class="btn btn-text" style="font-weight: 600; color: var(--primary);">View All Donations <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
@@ -171,7 +171,7 @@ if (!$latest_announcement) {
                         <th style="padding: 1rem 1.5rem;">Item</th>
                         <th style="padding: 1rem 1.5rem;">Quantity</th>
                         <th style="padding: 1rem 1.5rem;">Initiative</th>
-                        <th style="padding: 1rem 1.5rem;">Field Node</th>
+                        <th style="padding: 1rem 1.5rem;">Partner NGO</th>
                         <th style="padding: 1rem 1.5rem;">Status</th>
                     </tr>
                 </thead>
@@ -209,7 +209,7 @@ if (!$latest_announcement) {
         </div>
         <?php if (count($inkind_pledges) >= 5): ?>
             <div style="padding: 1rem; border-top: 1px solid var(--accent); text-align: center; background: rgba(245, 158, 11, 0.05);">
-                <a href="/share_hope/donor/pledges.php" class="btn btn-text" style="font-weight: 600; color: var(--accent);">View All Pledges <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+                <a href="<?= BASE_URL ?>/donor/pledges.php" class="btn btn-text" style="font-weight: 600; color: var(--accent);">View All Pledges <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
             </div>
         <?php endif; ?>
     </div>

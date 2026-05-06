@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/activity_logger.php';
 require_once __DIR__ . '/../includes/security.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php"); exit;
+    header("Location: " . BASE_URL . "/login.php"); exit;
 }
 
 // CSV Export
@@ -66,7 +66,7 @@ $total_pledges = $pdo->query("SELECT COUNT(*) FROM inkind_donations")->fetchColu
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
 
@@ -81,7 +81,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div style="background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); overflow: hidden; margin-bottom: 2rem;">
                 <div style="padding: 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
                     <h3 style="margin: 0; font-size: 1.1rem;">Latest Donations</h3>
-                    <a href="/share_hope/admin/all_donations.php" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">View All (<?= $total_donations ?>)</a>
+                    <a href="<?= BASE_URL ?>/admin/all_donations.php" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">View All (<?= $total_donations ?>)</a>
                 </div>
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
@@ -108,7 +108,7 @@ require_once __DIR__ . '/../includes/header.php';
                                         <td style="padding: 0.75rem 1rem; color: var(--primary); font-weight: 500;"><?= h($txn['ngo_name']) ?></td>
                                         <td style="padding: 0.75rem 1rem; color: var(--text-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= h($txn['campaign_title']) ?></td>
                                         <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--secondary);">KSh <?= number_format($txn['amount'], 2) ?></td>
-                                        <td style="padding: 0.75rem 1rem;"><a href="/share_hope/receipt.php?id=<?= $txn['id'] ?>" target="_blank" class="btn btn-outline" style="padding: 0.2rem 0.6rem; font-size: 0.7rem;"><i class="fa-solid fa-print"></i> Receipt</a></td>
+                                        <td style="padding: 0.75rem 1rem;"><a href="<?= BASE_URL ?>/receipt.php?id=<?= $txn['id'] ?>" target="_blank" class="btn btn-outline" style="padding: 0.2rem 0.6rem; font-size: 0.7rem;"><i class="fa-solid fa-print"></i> Receipt</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -116,7 +116,7 @@ require_once __DIR__ . '/../includes/header.php';
                     </table>
                 </div>
                 <div style="padding: 1rem; border-top: 1px solid var(--border); text-align: center; background: var(--background);">
-                    <a href="/share_hope/admin/all_donations.php" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.875rem;">
+                    <a href="<?= BASE_URL ?>/admin/all_donations.php" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.875rem;">
                         <i class="fa-solid fa-list"></i> View All Donations (<?= $total_donations ?>)
                     </a>
                 </div>
@@ -126,7 +126,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div style="margin-top: 2rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h2 style="font-size: 1.5rem; margin: 0;"><i class="fa-solid fa-hand-holding-heart" style="color: var(--accent); margin-right: 0.5rem;"></i>Latest In-Kind Pledges</h2>
-                    <a href="/share_hope/admin/all_pledges.php" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.875rem;">View All (<?= $total_pledges ?>)</a>
+                    <a href="<?= BASE_URL ?>/admin/all_pledges.php" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.875rem;">View All (<?= $total_pledges ?>)</a>
                 </div>
                 <div style="background: var(--surface); border-radius: var(--radius-lg); border: 2px solid var(--accent); overflow: hidden;">
                     <div style="overflow-x: auto;">
@@ -168,7 +168,7 @@ require_once __DIR__ . '/../includes/header.php';
                         </table>
                     </div>
                     <div style="padding: 1rem; border-top: 1px solid var(--border); text-align: center; background: var(--background);">
-                        <a href="/share_hope/admin/all_pledges.php" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.875rem;">
+                        <a href="<?= BASE_URL ?>/admin/all_pledges.php" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.875rem;">
                             <i class="fa-solid fa-hand-holding-heart"></i> View All Pledges (<?= $total_pledges ?>)
                         </a>
                     </div>

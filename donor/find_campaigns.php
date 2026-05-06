@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -151,10 +151,10 @@ $categories = $stmt->fetchAll();
                     </div>
                     
                     <div style="display: flex; gap: 0.5rem;">
-                        <a href="/share_hope/campaigns.php?id=<?= $campaign['id'] ?>" class="btn btn-outline" style="flex: 1; text-align: center;">
+                        <a href="<?= BASE_URL ?>/campaigns.php?id=<?= $campaign['id'] ?>" class="btn btn-outline" style="flex: 1; text-align: center;">
                             <i class="fa-solid fa-eye"></i> View Details
                         </a>
-                        <a href="/share_hope/donate.php?campaign_id=<?= $campaign['id'] ?>" class="btn btn-primary" style="flex: 1; text-align: center;">
+                        <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $campaign['id'] ?>" class="btn btn-primary" style="flex: 1; text-align: center;">
                             <i class="fa-solid fa-heart"></i> Donate Now
                         </a>
                     </div>
@@ -166,7 +166,7 @@ $categories = $stmt->fetchAll();
                     <i class="fa-solid fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
                     <h3>No Campaigns Found</h3>
                     <p>Try adjusting your search criteria or browse all campaigns.</p>
-                    <a href="/share_hope/donor/find_campaigns.php" class="btn btn-primary" style="margin-top: 1rem;">
+                    <a href="<?= BASE_URL ?>/donor/find_campaigns.php" class="btn btn-primary" style="margin-top: 1rem;">
                         <i class="fa-solid fa-refresh"></i> Clear Filters
                     </a>
                 </div>

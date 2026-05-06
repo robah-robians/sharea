@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header('Location: /share_hope/login.php');
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -36,7 +36,7 @@ $sql = "SELECT d.id, d.transaction_id, d.amount, d.status, d.payment_method, d.c
 $txns = $pdo->query($sql)->fetchAll();
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
         
@@ -150,7 +150,7 @@ $txns = $pdo->query($sql)->fetchAll();
                                                     </div>
 
                                                     <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Moderation Actions</div>
-                                                    <form action="/share_hope/actions/admin_moderate_donation.php" method="POST" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                                    <form action="<?= BASE_URL ?>/actions/admin_moderate_donation.php" method="POST" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                                         <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                         <input type="hidden" name="donation_id" value="<?= (int)$t['id'] ?>">
                                                         

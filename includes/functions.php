@@ -93,13 +93,13 @@ function has_role($role) {
 function require_login($required_role = null) {
     if (!is_logged_in()) {
         $_SESSION['error'] = "Please log in to access this page.";
-        header("Location: /share_hope/login.php");
+        header("Location: " . BASE_URL . "/login.php");
         exit;
     }
     
     if ($required_role && !has_role($required_role)) {
         $_SESSION['error'] = "Access denied. Insufficient permissions.";
-        header("Location: /share_hope/login.php");
+        header("Location: " . BASE_URL . "/login.php");
         exit;
     }
 }

@@ -1,10 +1,28 @@
 DirectoryIndex index.php
 
-# Ensure homepage always loads index.php
 RewriteEngine On
 
-# Force homepage to always load index.php
+# Force homepage to load index.php
 RewriteRule ^$ index.php [L]
 
-# Prevent direct access to dashboard.php in root (it should be in role-specific folders)
+# Prevent direct browser access to sensitive folders
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^database/ - [F,L]
+RewriteRule ^storage/  - [F,L]
+RewriteRule ^scripts/  - [F,L]
+RewriteRule ^archive/  - [F,L]
+RewriteRule ^logs/     - [F,L]
+RewriteRule ^backups/  - [F,L]
+
+# Prevent direct access to root dashboard.php (legacy redirect)
 RewriteRule ^dashboard\.php$ index.php [R=301,L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes

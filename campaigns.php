@@ -235,7 +235,7 @@ $categories = $stmt->fetchAll();
                         <div class="campaign-content">
                             <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i class="fa-solid fa-server text-primary" style="margin-right: 0.5rem;"></i>
-                                Verified Field Node: <span style="color: var(--primary);"><?= h($camp['ngo_name']) ?></span>
+                                Verified Partner NGO: <span style="color: var(--primary);"><?= h($camp['ngo_name']) ?></span>
                             </div>
                             <h3><?= h($camp['title']) ?></h3>
                             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
@@ -249,7 +249,7 @@ $categories = $stmt->fetchAll();
                                 <div class="progress-track" style="margin-bottom: 1.25rem;">
                                     <div class="progress-fill" style="width: <?= $percent ?>%; transition: width 1.5s ease-out;"></div>
                                 </div>
-                                <a href="/share_hope/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-primary" style="width: 100%; text-align: center; font-weight: 700;">
+                                <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-primary" style="width: 100%; text-align: center; font-weight: 700;">
                                     <i class="fa-solid fa-bolt" style="margin-right: 0.4rem;"></i> Accelerate Mission
                                 </a>
                             </div>
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         debounceTimer = setTimeout(() => {
-            fetch(`/share_hope/api/search_suggestions.php?q=${encodeURIComponent(query)}`)
+            fetch(`${BASE_URL}/api/search_suggestions.php?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.suggestions && data.suggestions.length > 0) {

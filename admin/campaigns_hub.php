@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -46,6 +46,15 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $campaigns = $stmt->fetchAll();
 
+// Pre-fill deploy form from an approved campaign request
+$prefill = null;
+$from_request = intval($_GET['from_request'] ?? 0);
+if ($from_request) {
+    $pr = $pdo->prepare("SELECT cr.*, n.id as ngo_id FROM campaign_requests cr JOIN ngos n ON cr.ngo_id = n.id WHERE cr.id = ?");
+    $pr->execute([$from_request]);
+    $prefill = $pr->fetch();
+}
+
 $stmt = $pdo->query("SELECT * FROM categories ORDER BY name");
 $categories = $stmt->fetchAll();
 
@@ -61,7 +70,7 @@ $stmt = $pdo->query("
 $stats = $stmt->fetch();
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
@@ -109,7 +118,7 @@ $stats = $stmt->fetch();
                     <!-- Analytics Grid -->
                     <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                         <div style="background: var(--background); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
-                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 0.25rem;">Active Nodes</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 0.25rem;">Active NGOs</div>
                             <div style="font-size: 1.85rem; font-weight: 800; color: var(--secondary);"><?= number_format($stats['active_count']) ?> System Live</div>
                         </div>
                         <div style="background: var(--background); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
@@ -128,7 +137,7 @@ $stats = $stmt->fetch();
                             <input type="hidden" name="tab" value="performance">
                             <select name="status" class="form-control" style="width: auto; font-size: 0.85rem;">
                                 <option value="">Target Status (All)</option>
-                                <option value="active" <?= $filter_status === 'active' ? 'selected' : '' ?>>Live Nodes</option>
+                                <option value="active" <?= $filter_status === 'active' ? 'selected' : '' ?>>Live NGOs</option>
                                 <option value="completed" <?= $filter_status === 'completed' ? 'selected' : '' ?>>Completed</option>
                             </select>
                             
@@ -212,16 +221,16 @@ $stats = $stmt->fetch();
 
                                         <!-- Actions -->
                                         <div style="display: flex; gap: 0.5rem; justify-content: space-between;">
-                                            <a href="/share_hope/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 1; text-align: center;" target="_blank" title="View public page">
+                                            <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 1; text-align: center;" target="_blank" title="View public page">
                                                 <i class="fa-solid fa-eye"></i> View
                                             </a>
-                                            <a href="/share_hope/admin/edit_campaign.php?id=<?= $camp['id'] ?>" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 1; text-align: center;" title="Edit initiative parameters">
+                                            <a href="<?= BASE_URL ?>/admin/edit_campaign.php?id=<?= $camp['id'] ?>" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 1; text-align: center;" title="Edit initiative parameters">
                                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                                             </a>
-                                            <form method="POST" action="/share_hope/actions/undeploy_campaign_action.php" style="display:inline; flex: 1;" onsubmit="return confirm('TERMINATE this initiative? If donations exist it will be archived. If none, it will be deleted permanently.');">
+                                            <form method="POST" action="<?= BASE_URL ?>/actions/undeploy_campaign_action.php" style="display:inline; flex: 1;" onsubmit="return confirm('TERMINATE this initiative? If donations exist it will be archived. If none, it will be deleted permanently.');">
                                                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                 <input type="hidden" name="campaign_id" value="<?= $camp['id'] ?>">
-                                                <input type="hidden" name="redirect_url" value="/share_hope/admin/campaigns_hub.php?tab=performance">
+                                                <input type="hidden" name="redirect_url" value=BASE_URL . "/admin/campaigns_hub.php?tab=performance">
                                                 <button type="submit" class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem; background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); cursor: pointer; width: 100%; title='Terminate/Undeploy initiative';">
                                                     <i class="fa-solid fa-circle-xmark"></i> End
                                                 </button>
@@ -245,23 +254,30 @@ $stats = $stmt->fetch();
                     <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 2.5rem; max-width: 900px; margin: 0 auto;">
                         <h3 style="margin-top: 0; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;"><i class="fa-solid fa-bolt text-accent" style="margin-right: 0.5rem;"></i> Parameter Configuration</h3>
                         
-                        <form action="/share_hope/actions/create_campaign_action.php" method="POST" enctype="multipart/form-data">
+                        <form action="<?= BASE_URL ?>/actions/create_campaign_action.php" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
-                            <input type="hidden" name="redirect_url" value="/share_hope/admin/campaigns_hub.php?tab=performance">
+                            <input type="hidden" name="redirect_url" value=BASE_URL . "/admin/campaigns_hub.php?tab=performance">
+                            <?php if ($prefill): ?>
+                            <input type="hidden" name="ngo_id" value="<?= $prefill['ngo_id'] ?>">
+                            <input type="hidden" name="from_request_id" value="<?= $prefill['id'] ?>">
+                            <div style="background: rgba(16,185,129,0.08); border-left: 4px solid var(--secondary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--secondary); font-weight: 600;">
+                                <i class="fa-solid fa-circle-check"></i> Pre-filled from NGO campaign request #<?= $prefill['id'] ?>. Review and publish.
+                            </div>
+                            <?php endif; ?>
                             
                             <div class="form-group" style="margin-bottom: 1.5rem;">
                                 <label class="form-label" style="font-weight: 700;">Operation Title</label>
-                                <input type="text" name="title" class="form-control" required placeholder="E.g., Global Hydration Implementation Phase 1" style="padding: 0.85rem; background: var(--background);">
+                                <input type="text" name="title" class="form-control" required placeholder="E.g., Global Hydration Implementation Phase 1" value="<?= $prefill ? h($prefill['title']) : '' ?>" style="padding: 0.85rem; background: var(--background);">
                             </div>
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                                 <div class="form-group">
                                     <label class="form-label" style="font-weight: 700;">Fiscal Requirement (KSh)</label>
-                                    <input type="number" step="0.01" name="goal_amount" class="form-control" required placeholder="50000" style="padding: 0.85rem; background: var(--background);">
+                                    <input type="number" step="0.01" name="goal_amount" class="form-control" required placeholder="50000" value="<?= $prefill ? h($prefill['goal_amount']) : '' ?>" style="padding: 0.85rem; background: var(--background);">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" style="font-weight: 700;">Logic Closure Timeline (Deadline)</label>
-                                    <input type="date" name="deadline" class="form-control" required style="padding: 0.85rem; background: var(--background);">
+                                    <input type="date" name="deadline" class="form-control" required value="<?= $prefill ? h($prefill['deadline']) : '' ?>" style="padding: 0.85rem; background: var(--background);">
                                 </div>
                             </div>
 
@@ -281,14 +297,14 @@ $stats = $stmt->fetch();
                                 <select name="category_id" class="form-control" required style="padding: 0.85rem; background: var(--background);">
                                     <option value="">Designate System Category</option>
                                     <?php foreach($categories as $cat): ?>
-                                        <option value="<?= $cat['id'] ?>"><?= h($cat['name']) ?></option>
+                                        <option value="<?= $cat['id'] ?>" <?= ($prefill && $prefill['category_id'] == $cat['id']) ? 'selected' : '' ?>><?= h($cat['name']) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 1.5rem;">
                                 <label class="form-label" style="font-weight: 700;">Mission Telemetry (Description)</label>
-                                <textarea name="description" class="form-control" rows="6" required placeholder="Transmit full operation thesis, infrastructure required, and output estimates..." style="padding: 0.85rem; background: var(--background);"></textarea>
+                                <textarea name="description" class="form-control" rows="6" required placeholder="Transmit full operation thesis, infrastructure required, and output estimates..." style="padding: 0.85rem; background: var(--background);"><?= $prefill ? h($prefill['description']) : '' ?></textarea>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 1.5rem;">
@@ -303,7 +319,7 @@ $stats = $stmt->fetch();
 
                             <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 1.5rem;">
                                 <button type="button" onclick="showTab('performance')" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">Abort Initialization</button>
-                                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;"><i class="fa-solid fa-satellite-dish" style="margin-right: 0.5rem;"></i> Initialize Node Deployment</button>
+                                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;"><i class="fa-solid fa-satellite-dish" style="margin-right: 0.5rem;"></i> Publish Campaign</button>
                             </div>
                         </form>
                     </div>

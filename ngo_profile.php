@@ -65,7 +65,7 @@ $campaigns = $stmt->fetchAll();
                             <div class="progress-track">
                                 <div class="progress-fill" data-width="<?= $percent ?>%"></div>
                             </div>
-                            <a href="/share_hope/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-primary" style="width: 100%;">Donate Now</a>
+                            <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-primary" style="width: 100%;">Donate Now</a>
                         </div>
                     </div>
                 </div>

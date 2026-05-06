@@ -28,6 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error_message'] = "Error broadcasting announcement: " . $e->getMessage();
     }
 
-    header("Location: /share_hope/admin/dashboard.php");
+    header("Location: " . BASE_URL . "/admin/dashboard.php");
     exit;
 }
+
+// RBAC Enforcement: Assistant Admins (Level 1) cannot perform write actions
+if (($_SESSION['role_level'] ?? 1) < 2) {
+    $_SESSION['error'] = 'Unauthorized action. Assistant Admins have read-only access.';
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/dashboard.php'));
+    exit;
+}
+

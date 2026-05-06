@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if (!isset($_SESSION['pending_donation'])) {
-    header("Location: /share_hope/campaigns.php");
+    header("Location: " . BASE_URL . "/campaigns.php");
     exit;
 }
 
@@ -60,12 +60,12 @@ try {
     $pdo->commit();
 
     $_SESSION['success'] = "Thank you! Your simulated M-Pesa SDK Push was successful.";
-    header("Location: /share_hope/receipt.php?id=" . $donation_id);
+    header("Location: ' . BASE_URL . '/receipt.php?id=" . $donation_id);
     exit;
 
 } catch (Exception $e) {
     $pdo->rollBack();
     $_SESSION['error'] = "M-Pesa processing failed: " . $e->getMessage();
-    header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
+    header("Location: ' . BASE_URL . '/donate.php?campaign_id=" . $campaign_id);
     exit;
 }

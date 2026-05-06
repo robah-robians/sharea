@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin','super_admin'])) {
-    header("Location: /share_hope/login.php"); exit;
+    header("Location: " . BASE_URL . "/login.php"); exit;
 }
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/activity_logger.php';
@@ -52,7 +52,7 @@ $counts = [
 ];
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
 
@@ -104,7 +104,7 @@ $counts = [
                                     <div style="flex:1;min-width:0;">
                                         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;flex-wrap:wrap;">
                                             <span style="background:rgba(245,158,11,0.1);color:var(--accent);padding:0.25rem 0.75rem;border-radius:999px;font-size:0.75rem;font-weight:700;">⏳ PENDING REVIEW</span>
-                                            <a href="/share_hope/donate.php?campaign_id=<?= $upd['camp_id'] ?>" target="_blank" style="font-weight:700;color:var(--primary);font-size:0.9rem;"><?= h($upd['campaign_title']) ?></a>
+                                            <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $upd['camp_id'] ?>" target="_blank" style="font-weight:700;color:var(--primary);font-size:0.9rem;"><?= h($upd['campaign_title']) ?></a>
                                             <span style="font-size:0.8rem;color:var(--text-muted);">Submitted by: <?= h($upd['submitter_name'] ?? 'NGO') ?></span>
                                             <span style="font-size:0.78rem;color:var(--text-muted);"><i class="fa-regular fa-clock"></i> <?= date('M j, Y g:i A', strtotime($upd['created_at'])) ?></span>
                                         </div>
@@ -115,7 +115,7 @@ $counts = [
                                     </div>
                                     <div style="display:flex;flex-direction:column;gap:0.5rem;min-width:160px;">
                                         <!-- Approve -->
-                                        <form method="POST" action="/share_hope/actions/admin_review_update.php">
+                                        <form method="POST" action="<?= BASE_URL ?>/actions/admin_review_update.php">
                                             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                             <input type="hidden" name="update_id" value="<?= $upd['id'] ?>">
                                             <input type="hidden" name="action" value="approve">
@@ -127,7 +127,7 @@ $counts = [
                                         <button onclick="toggleRejectForm(<?= $upd['id'] ?>)" class="btn btn-outline" style="width:100%;padding:0.6rem 1rem;font-size:0.82rem;color:var(--danger);border-color:rgba(239,68,68,0.4);">
                                             <i class="fa-solid fa-ban"></i> Reject
                                         </button>
-                                        <form id="reject-form-<?= $upd['id'] ?>" method="POST" action="/share_hope/actions/admin_review_update.php" style="display:none;">
+                                        <form id="reject-form-<?= $upd['id'] ?>" method="POST" action="<?= BASE_URL ?>/actions/admin_review_update.php" style="display:none;">
                                             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                             <input type="hidden" name="update_id" value="<?= $upd['id'] ?>">
                                             <input type="hidden" name="action" value="reject">
@@ -151,7 +151,7 @@ $counts = [
                             <?php foreach ($approved_updates as $upd): ?>
                             <div style="background:var(--background);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;">
                                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem;">
-                                    <a href="/share_hope/donate.php?campaign_id=<?= $upd['camp_id'] ?>" target="_blank" style="font-weight:700;color:var(--primary);"><?= h($upd['campaign_title']) ?></a>
+                                    <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $upd['camp_id'] ?>" target="_blank" style="font-weight:700;color:var(--primary);"><?= h($upd['campaign_title']) ?></a>
                                     <span style="font-size:0.78rem;color:var(--text-muted);">Published <?= date('M j, Y', strtotime($upd['reviewed_at'])) ?> · by <?= h($upd['reviewer_name'] ?? 'Admin') ?></span>
                                 </div>
                                 <p style="margin:0;color:var(--text-muted);font-size:0.9rem;line-height:1.6;"><?= nl2br(h(substr($upd['message'],0,200))) ?>...</p>
@@ -170,7 +170,7 @@ $counts = [
                             <?php foreach ($rejected_updates as $upd): ?>
                             <div style="background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-md);padding:1.25rem;">
                                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem;">
-                                    <a href="/share_hope/donate.php?campaign_id=<?= $upd['camp_id'] ?>" target="_blank" style="font-weight:700;color:var(--primary);"><?= h($upd['campaign_title']) ?></a>
+                                    <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $upd['camp_id'] ?>" target="_blank" style="font-weight:700;color:var(--primary);"><?= h($upd['campaign_title']) ?></a>
                                     <span style="font-size:0.78rem;color:var(--danger);">Rejected <?= date('M j, Y', strtotime($upd['reviewed_at'])) ?></span>
                                 </div>
                                 <p style="margin:0 0 0.5rem;color:var(--text-muted);font-size:0.9rem;"><?= nl2br(h(substr($upd['message'],0,200))) ?>...</p>

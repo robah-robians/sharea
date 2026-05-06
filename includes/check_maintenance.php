@@ -18,13 +18,13 @@ if (file_exists($lockFile) && !$isAdmin && $current_page !== 'maintenance.php' &
         die("Service Unavailable: The platform is currently undergoing critical maintenance. Please try your request again shortly.");
     }
 
-    header("Location: /share_hope/maintenance.php");
+    header("Location: " . BASE_URL . "/maintenance.php");
     exit;
 }
 
 // Redirect away from maintenance page if the lock is removed
 if (!file_exists($lockFile) && $current_page === 'maintenance.php') {
-    header("Location: /share_hope/index.php");
+    header("Location: " . BASE_URL . "/index.php");
     exit;
 }
 

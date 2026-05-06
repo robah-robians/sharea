@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /share_hope/campaigns.php");
+    header("Location: " . BASE_URL . "/campaigns.php");
     exit;
 }
 
@@ -26,7 +26,7 @@ $donor_phone = trim($_POST['donor_phone'] ?? '');
 
 if (empty($quantity) || empty($item_description) || empty($item_category)) {
     $_SESSION['error'] = "Please fill in all required item details.";
-    header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
+    header("Location: ' . BASE_URL . '/donate.php?campaign_id=" . $campaign_id);
     exit;
 }
 
@@ -63,12 +63,12 @@ try {
     $pdo->commit();
 
     $_SESSION['success'] = "Thank you! Your pledge for physical items has been recorded. The organization will contact you shortly.";
-    header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
+    header("Location: ' . BASE_URL . '/donate.php?campaign_id=" . $campaign_id);
     exit;
 
 } catch (Exception $e) {
     $pdo->rollBack();
     $_SESSION['error'] = "Failed to process pledge: " . $e->getMessage();
-    header("Location: /share_hope/donate.php?campaign_id=" . $campaign_id);
+    header("Location: ' . BASE_URL . '/donate.php?campaign_id=" . $campaign_id);
     exit;
 }

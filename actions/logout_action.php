@@ -2,5 +2,5 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location: /share_hope/");
+header("Location: " . BASE_URL . "/");
 exit;

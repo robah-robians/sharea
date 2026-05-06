@@ -33,7 +33,7 @@ $new_block = <<<EOT
                         <?php endif; ?>
                     </div>
 
-                    <form action="/share_hope/actions/toggle_maintenance.php" method="POST" style="margin: 0; padding-left: 1rem; border-left: 1px solid var(--border);">
+                    <form action="<?= BASE_URL ?>/actions/toggle_maintenance.php" method="POST" style="margin: 0; padding-left: 1rem; border-left: 1px solid var(--border);">
                         <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                         <?php if (file_exists(__DIR__ . '/../.maintenance_lock')): ?>
                             <input type="hidden" name="action" value="disable">

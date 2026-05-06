@@ -44,7 +44,7 @@ $donations = $stmt->fetchAll();
                 <i class="fa-solid fa-heart-crack" style="font-size: 3rem; color: var(--border); margin-bottom: 1rem;"></i>
                 <h4>No donations yet.</h4>
                 <p class="text-muted" style="margin-bottom: 1.5rem;">Ready to make an impact?</p>
-                <a href="/share_hope/campaigns.php" class="btn btn-primary">Find a Campaign</a>
+                <a href="<?= BASE_URL ?>/campaigns.php" class="btn btn-primary">Find a Campaign</a>
             </div>
         <?php else: ?>
             <div style="overflow-x: auto;">
@@ -66,7 +66,7 @@ $donations = $stmt->fetchAll();
                                 <td style="padding: 1rem 1.5rem;"><?= h($don['ngo_name']) ?></td>
                                 <td style="padding: 1rem 1.5rem; font-weight: 600; color: var(--text-main);">$<?= number_format($don['amount'], 2) ?></td>
                                 <td style="padding: 1rem 1.5rem;">
-                                    <a href="/share_hope/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i class="fa-solid fa-file-invoice"></i> View</a>
+                                    <a href="<?= BASE_URL ?>/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i class="fa-solid fa-file-invoice"></i> View</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

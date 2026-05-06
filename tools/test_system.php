@@ -37,14 +37,14 @@ require_once __DIR__ . '/includes/header.php';
                 <h3>Current User</h3>
                 <p>Role: <?= h($_SESSION['user_role']) ?></p>
                 <p>Name: <?= h($_SESSION['user_name']) ?></p>
-                <a href="/share_hope/<?= $_SESSION['user_role'] ?>/dashboard.php" class="btn" style="background: white; color: var(--info); margin-top: 0.5rem;">
+                <a href="<?= BASE_URL ?>/<?= $_SESSION['user_role'] ?>/dashboard.php" class="btn" style="background: white; color: var(--info); margin-top: 0.5rem;">
                     Go to Dashboard
                 </a>
             </div>
         <?php else: ?>
             <div style="margin: 2rem 0;">
-                <a href="/share_hope/login.php" class="btn btn-primary">Login</a>
-                <a href="/share_hope/register.php" class="btn btn-outline">Register</a>
+                <a href="<?= BASE_URL ?>/login.php" class="btn btn-primary">Login</a>
+                <a href="<?= BASE_URL ?>/register.php" class="btn btn-outline">Register</a>
             </div>
         <?php endif; ?>
         

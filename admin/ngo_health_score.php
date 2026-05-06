@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -66,7 +66,7 @@ $ngos = $ngo_scores;
 $avg_score = count($ngos) > 0 ? array_sum(array_column($ngos, 'score')) / count($ngos) : 0;
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
 
@@ -183,7 +183,7 @@ $avg_score = count($ngos) > 0 ? array_sum(array_column($ngos, 'score')) / count(
                                             </span>
                                         </td>
                                         <td style="padding: 1rem 1.5rem;">
-                                            <a href="/share_hope/admin/view_user.php?user_id=<?= $ngo['user_id'] ?>" class="text-primary" style="text-decoration: none; font-weight: 500; white-space: nowrap;">
+                                            <a href="<?= BASE_URL ?>/admin/view_user.php?user_id=<?= $ngo['user_id'] ?>" class="text-primary" style="text-decoration: none; font-weight: 500; white-space: nowrap;">
                                                 <i class="fa-solid fa-arrow-right"></i> View Profile
                                             </a>
                                         </td>

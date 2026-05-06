@@ -30,7 +30,7 @@ if (isset($_GET['token'])) {
                 </div>
                 <h2 style="color: var(--text-main); margin: 0 0 0.5rem 0;">Email Verified!</h2>
                 <p style="color: var(--text-muted); margin: 0 0 1.5rem 0;">Your email address has been successfully verified.</p>
-                <a href="/share_hope/login.php" class="btn btn-primary">Log In to Your Account</a>
+                <a href="<?= BASE_URL ?>/login.php" class="btn btn-primary">Log In to Your Account</a>
             </div>
         <?php else: ?>
             <div style="margin-bottom: 1.5rem;">
@@ -40,8 +40,8 @@ if (isset($_GET['token'])) {
                 <h2 style="color: var(--text-main); margin: 0 0 0.5rem 0;">Verification Failed</h2>
                 <p style="color: var(--text-muted); margin: 0 0 1.5rem 0;"><?= h($error) ?></p>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
-                    <a href="/share_hope/login.php" style="color: var(--primary); text-decoration: none;">Return to login</a> or 
-                    <a href="/share_hope/register.php" style="color: var(--primary); text-decoration: none;">register again</a>
+                    <a href="<?= BASE_URL ?>/login.php" style="color: var(--primary); text-decoration: none;">Return to login</a> or 
+                    <a href="<?= BASE_URL ?>/register.php" style="color: var(--primary); text-decoration: none;">register again</a>
                 </p>
             </div>
         <?php endif; ?>

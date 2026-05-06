@@ -45,7 +45,7 @@ session_start();
             <button type="submit" class="clear-btn">Clear All Session Data</button>
         </form>
         
-        <a href="/share_hope/" style="margin-left: 1rem; padding: 0.5rem 1rem; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Go to Home Page</a>
+        <a href="<?= BASE_URL ?>/" style="margin-left: 1rem; padding: 0.5rem 1rem; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Go to Home Page</a>
     </div>
     
     <?php
@@ -59,7 +59,7 @@ session_start();
         }
         
         echo '<div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
-                Session cleared successfully! <a href="/share_hope/">Go to Home Page</a>
+                Session cleared successfully! <a href="<?= BASE_URL ?>/">Go to Home Page</a>
               </div>';
     }
     ?>

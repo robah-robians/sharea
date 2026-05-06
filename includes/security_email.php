@@ -70,7 +70,7 @@ function verify_email_token($pdo, $token) {
  */
 function send_verification_email($email, $name, $token) {
     try {
-        $verification_link = "https://{$_SERVER['HTTP_HOST']}/share_hope/verify_email.php?token=" . urlencode($token);
+        $verification_link = "https://{$_SERVER['HTTP_HOST']}" . BASE_URL . "/verify_email.php?token=" . urlencode($token);
         
         $subject = "Verify your Share Hope account";
         $message = "

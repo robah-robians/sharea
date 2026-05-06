@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'ngo') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -18,13 +18,13 @@ $stmt = $pdo->prepare("SELECT c.id FROM campaigns c JOIN ngos n ON c.ngo_id = n.
 $stmt->execute([$campaign_id, $user_id]);
 if (!$stmt->fetch()) {
     $_SESSION['error'] = "Unauthorized access.";
-    header("Location: /share_hope/ngo/dashboard.php");
+    header("Location: " . BASE_URL . "/ngo/dashboard.php");
     exit;
 }
 
 if (empty($message)) {
     $_SESSION['error'] = "Update message cannot be empty.";
-    header("Location: /share_hope/ngo/edit_campaign.php?id=" . $campaign_id);
+    header("Location: ' . BASE_URL . '/ngo/edit_campaign.php?id=" . $campaign_id);
     exit;
 }
 
@@ -43,12 +43,12 @@ if (!empty($_FILES['update_image']['name'])) {
             $image_url = '/assets/uploads/images/' . $newFilename;
         } else {
             $_SESSION['error'] = "Error uploading update image.";
-            header("Location: /share_hope/ngo/edit_campaign.php?id=" . $campaign_id);
+            header("Location: ' . BASE_URL . '/ngo/edit_campaign.php?id=" . $campaign_id);
             exit;
         }
     } else {
         $_SESSION['error'] = "Invalid image format for update.";
-        header("Location: /share_hope/ngo/edit_campaign.php?id=" . $campaign_id);
+        header("Location: ' . BASE_URL . '/ngo/edit_campaign.php?id=" . $campaign_id);
         exit;
     }
 }
@@ -61,5 +61,5 @@ try {
     $_SESSION['error'] = "Failed to submit update: " . $e->getMessage();
 }
 
-header("Location: /share_hope/ngo/dashboard.php");
+header("Location: " . BASE_URL . "/ngo/dashboard.php");
 exit;

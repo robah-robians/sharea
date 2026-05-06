@@ -6,7 +6,7 @@ $campaign_id = intval($_GET['id'] ?? 0);
 
 if (!$campaign_id) {
     $_SESSION['error'] = "Campaign not found.";
-    header("Location: /share_hope/index.php");
+    header("Location: " . BASE_URL . "/index.php");
     exit;
 }
 
@@ -24,7 +24,7 @@ $campaign = $stmt->fetch();
 
 if (!$campaign) {
     $_SESSION['error'] = "Campaign not found or is no longer active.";
-    header("Location: /share_hope/index.php");
+    header("Location: " . BASE_URL . "/index.php");
     exit;
 }
 
@@ -60,7 +60,7 @@ $type_icon = $type_icons[$campaign['campaign_type']] ?? 'fa-megaphone';
 <div class="container" style="padding: 4rem 0; max-width: 900px;">
     <!-- Back Button -->
     <div style="margin-bottom: 2rem;">
-        <a href="/share_hope/index.php" style="color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; width: fit-content;">
+        <a href="<?= BASE_URL ?>/index.php" style="color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; width: fit-content;">
             <i class="fa-solid fa-arrow-left"></i> Back to Home
         </a>
     </div>
@@ -250,7 +250,7 @@ $type_icon = $type_icons[$campaign['campaign_type']] ?? 'fa-megaphone';
         ?>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
                 <?php foreach ($related as $item): ?>
-                    <a href="/share_hope/awareness_detail.php?id=<?= $item['id'] ?>" style="text-decoration: none; display: block;">
+                    <a href="<?= BASE_URL ?>/awareness_detail.php?id=<?= $item['id'] ?>" style="text-decoration: none; display: block;">
                         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='var(--shadow-md)'; this.style.borderColor='var(--primary)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)'; this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
                             <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
                                 <span style="padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; background: rgba(0, 102, 255, 0.1); color: var(--primary);">

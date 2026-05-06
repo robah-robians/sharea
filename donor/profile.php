@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="container" style="padding: 4rem 0; max-width: 600px;">
     <div style="margin-bottom: 2rem;">
-        <a href="/share_hope/donor/dashboard.php" class="text-primary"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+        <a href="<?= BASE_URL ?>/donor/dashboard.php" class="text-primary"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
     </div>
 
     <div

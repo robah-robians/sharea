@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /share_hope/admin/campaigns_hub.php");
+    header("Location: " . BASE_URL . "/admin/campaigns_hub.php");
     exit;
 }
 
@@ -13,13 +13,13 @@ verify_csrf_token($_POST['csrf_token'] ?? '');
 // Admin only
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
     $_SESSION['error'] = "Unauthorized. Admin access required.";
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
 $campaign_id = intval($_POST['campaign_id'] ?? 0);
-$redirect    = $_POST['redirect_url'] ?? "/share_hope/admin/campaigns_hub.php?tab=performance";
-$edit_url    = "/share_hope/admin/edit_campaign.php?id=" . $campaign_id;
+$redirect    = $_POST['redirect_url'] ?? BASE_URL . "/admin/campaigns_hub.php?tab=performance";
+$edit_url    = BASE_URL . "/admin/edit_campaign.php?id=" . $campaign_id;
 
 if (!$campaign_id) {
     $_SESSION['error'] = "Invalid initiative ID.";
@@ -62,7 +62,7 @@ if (!empty($_FILES['image']['name'])) {
     if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
         $newFilename = uniqid('camp_') . '.' . $ext;
         if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $newFilename)) {
-            $image_url = '/share_hope/assets/uploads/campaigns/' . $newFilename;
+            $image_url = BASE_URL . '/assets/uploads/campaigns/' . $newFilename;
         }
     } else {
         $_SESSION['error'] = "Invalid image format. Use JPG or PNG.";

@@ -3,14 +3,14 @@ session_start();
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
 $campaign_id = intval($_GET['id'] ?? 0);
 if (!$campaign_id) {
     $_SESSION['error'] = "Invalid initiative ID.";
-    header("Location: /share_hope/admin/campaigns_hub.php?tab=performance");
+    header("Location: " . BASE_URL . "/admin/campaigns_hub.php?tab=performance");
     exit;
 }
 
@@ -27,7 +27,7 @@ $campaign = $stmt->fetch();
 
 if (!$campaign) {
     $_SESSION['error'] = "Initiative not found or has been terminated.";
-    header("Location: /share_hope/admin/campaigns_hub.php?tab=performance");
+    header("Location: " . BASE_URL . "/admin/campaigns_hub.php?tab=performance");
     exit;
 }
 
@@ -35,7 +35,7 @@ if (!$campaign) {
 $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
 
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
@@ -51,7 +51,7 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
                         Modifying deployment: <strong style="color: var(--primary);"><?= h($campaign['title']) ?></strong>
                     </p>
                 </div>
-                <a href="/share_hope/admin/campaigns_hub.php?tab=performance" class="btn btn-outline" style="padding: 0.6rem 1.25rem;">
+                <a href="<?= BASE_URL ?>/admin/campaigns_hub.php?tab=performance" class="btn btn-outline" style="padding: 0.6rem 1.25rem;">
                     <i class="fa-solid fa-arrow-left" style="margin-right: 0.35rem;"></i> Back to Hub
                 </a>
             </div>
@@ -72,10 +72,10 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
                     </h3>
                 </div>
 
-                <form action="/share_hope/actions/edit_campaign_action.php" method="POST" enctype="multipart/form-data" style="padding: 2rem;">
+                <form action="<?= BASE_URL ?>/actions/edit_campaign_action.php" method="POST" enctype="multipart/form-data" style="padding: 2rem;">
                     <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                     <input type="hidden" name="campaign_id" value="<?= $campaign_id ?>">
-                    <input type="hidden" name="redirect_url" value="/share_hope/admin/campaigns_hub.php?tab=performance">
+                    <input type="hidden" name="redirect_url" value=BASE_URL . "/admin/campaigns_hub.php?tab=performance">
 
                     <!-- Operation Title -->
                     <div class="form-group" style="margin-bottom: 1.5rem;">
@@ -161,7 +161,7 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
 
                     <!-- Actions -->
                     <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                        <a href="/share_hope/admin/campaigns_hub.php?tab=performance" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">
+                        <a href="<?= BASE_URL ?>/admin/campaigns_hub.php?tab=performance" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">
                             Abort Changes
                         </a>
                         <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">

@@ -1,0 +1,38 @@
+# ── Sensitive config (contains DB credentials) ───────────────────────────────
+config.php
+
+# ── Uploaded user files (too large, not code) ────────────────────────────────
+assets/uploads/campaigns/*
+assets/uploads/docs/*
+assets/uploads/images/*
+
+# Keep the upload folders themselves
+!assets/uploads/campaigns/.gitkeep
+!assets/uploads/docs/.gitkeep
+!assets/uploads/images/.gitkeep
+
+# ── Runtime generated files ───────────────────────────────────────────────────
+storage/logs/*
+storage/backups/*
+logs/
+backups/
+
+# ── Dev/debug tools (never on production) ────────────────────────────────────
+tools/
+
+# ── Database backups ─────────────────────────────────────────────────────────
+*.sql.gz
+*.sql.zip
+
+# ── OS & editor junk ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+*.err

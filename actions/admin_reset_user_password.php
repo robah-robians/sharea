@@ -4,12 +4,20 @@ require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header('Location: /share_hope/login.php');
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
+// RBAC Enforcement: Assistant Admins (Level 1) cannot perform write actions
+if (($_SESSION['role_level'] ?? 1) < 2) {
+    $_SESSION['error'] = 'Unauthorized action. Assistant Admins have read-only access.';
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/dashboard.php'));
+    exit;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /share_hope/admin/password_resets.php');
+    header("Location: " . BASE_URL . "/admin/password_resets.php");
     exit;
 }
 
@@ -18,13 +26,13 @@ verify_csrf_token($_POST['csrf_token'] ?? '');
 $criticalLockFile = __DIR__ . '/../.critical_update_lock';
 if (file_exists($criticalLockFile) && $_SESSION['user_role'] !== 'super_admin') {
     $_SESSION['error'] = 'Critical update lock is enabled. Password reset is temporarily disabled.';
-    header('Location: /share_hope/admin/password_resets.php');
+    header("Location: " . BASE_URL . "/admin/password_resets.php");
     exit;
 }
 $targetUserId = (int)($_POST['user_id'] ?? 0);
 if ($targetUserId <= 0) {
     $_SESSION['error'] = 'Invalid user selected.';
-    header('Location: /share_hope/admin/password_resets.php');
+    header("Location: " . BASE_URL . "/admin/password_resets.php");
     exit;
 }
 
@@ -34,13 +42,13 @@ $target = $stmt->fetch();
 
 if (!$target) {
     $_SESSION['error'] = 'User not found.';
-    header('Location: /share_hope/admin/password_resets.php');
+    header("Location: " . BASE_URL . "/admin/password_resets.php");
     exit;
 }
 
 if ((int)$target['role_level'] >= 3 && $_SESSION['user_role'] !== 'super_admin') {
     $_SESSION['error'] = 'Protected account password cannot be reset by this role.';
-    header('Location: /share_hope/admin/password_resets.php');
+    header("Location: " . BASE_URL . "/admin/password_resets.php");
     exit;
 }
 
@@ -61,7 +69,7 @@ $ok = $upd->execute([$newHash, $targetUserId]);
 
 if (!$ok) {
     $_SESSION['error'] = 'Failed to reset password.';
-    header('Location: /share_hope/admin/password_resets.php');
+    header("Location: " . BASE_URL . "/admin/password_resets.php");
     exit;
 }
 
@@ -77,5 +85,5 @@ log_admin_activity(
 );
 
 $_SESSION['success'] = 'Temporary password for ' . $target['email'] . ': ' . $tempPassword . ' (share securely, then ask user to change it).';
-header('Location: /share_hope/admin/password_resets.php');
+header("Location: " . BASE_URL . "/admin/password_resets.php");
 exit;

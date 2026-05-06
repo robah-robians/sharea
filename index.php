@@ -114,7 +114,8 @@ try {
 .stat-item h3 {
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 800;
-    color: var(--text-main);
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     margin-bottom: 0.5rem;
 }
 
@@ -122,7 +123,7 @@ try {
     text-transform: uppercase;
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--brand-highlight);
     letter-spacing: 1.5px;
     margin: 0;
 }
@@ -182,29 +183,29 @@ try {
 }
 </style>
 
-<section class="hero" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 6rem 0; text-align: center; border-radius: 0 0 2rem 2rem; margin-bottom: 4rem;">
+<section class="hero" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); min-height: 600px; padding: 4rem 0; display: flex; flex-direction: column; justify-content: center; text-align: center; border-radius: 0 0 2rem 2rem; margin-bottom: 4rem;">
     <div class="container">
-        <h1 style="font-size: 3.5rem; margin-bottom: 1rem; color: #ffffff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Verified Transparency.<br><span style="font-weight: 300;">Powered by SHARE HOPE.</span></h1>
-        <p style="font-size: 1.25rem; max-width: 600px; margin: 0 auto 3rem; opacity: 0.9; color: #ffffff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
-            SHARE HOPE ensures complete transparency and trust. Donors and NGOs participate in a verified ecosystem where every transaction is tracked, verified, and auditable in real-time.
+        <h1 style="font-size: 3.5rem; margin-bottom: 1rem; color: #ffffff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Delivering Hope, Together.<br><span style="font-weight: 300;">Powered by SHARE HOPE.</span></h1>
+        <p style="font-size: 1.25rem; max-width: 680px; margin: 0 auto 1.5rem; opacity: 0.9; color: #ffffff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
+            SHARE HOPE connects compassionate donors with trusted NGOs to support those who need it most. Together, we provide vital relief, empower communities, and respond to crises with complete transparency.
         </p>
-        <div class="hero-actions" style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
-            <a href="/share_hope/impact.php" class="btn btn-primary" style="padding: 1.25rem 2.5rem; font-size: 1.125rem; font-weight: 700; background: rgba(255,255,255,0.2); border: 2px solid white; color: white; box-shadow: none;">
+        <div class="hero-actions" style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
+            <a href="<?= BASE_URL ?>/impact.php" class="btn btn-primary" style="padding: 1.25rem 2.5rem; font-size: 1.125rem; font-weight: 700; background: rgba(255,255,255,0.2); border: 2px solid white; color: white; box-shadow: none;">
                 <i class="fa-solid fa-earth-africa" style="margin-right: 0.75rem;"></i> View Impact Map
             </a>
-            <a href="/share_hope/campaigns.php" class="btn btn-outline" style="padding: 1.25rem 2.5rem; font-size: 1.125rem; font-weight: 700; background: white; color: var(--primary); border: none;">
+            <a href="<?= BASE_URL ?>/campaigns.php" class="btn btn-outline" style="padding: 1.25rem 2.5rem; font-size: 1.125rem; font-weight: 700; background: white; color: var(--primary); border: none;">
                 <i class="fa-solid fa-satellite-dish" style="margin-right: 0.75rem;"></i> Browse Initiatives
             </a>
         </div>
 
-        <div class="hero-stats">
+        <div class="hero-stats" style="margin-top: 1.5rem;">
             <div class="stat-item">
                 <h3 data-target="<?= $stats['total_raised'] + 4200000 ?>" data-format="money">$0</h3>
                 <p>Capital Deployed</p>
             </div>
             <div class="stat-item">
                 <h3 data-target="<?= $stats['verified_ngos'] + 150 ?>">0+</h3>
-                <p>Verified Nodes (NGOs)</p>
+                <p>Verified Partner NGOs</p>
             </div>
             <div class="stat-item">
                 <h3 data-target="<?= $stats['total_donors'] + 12000 ?>" data-format="k">0</h3>
@@ -283,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <div class="progress-track">
                                         <div class="progress-fill" data-width="<?= $percent ?>%"></div>
                                     </div>
-                                    <a href="/share_hope/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-primary"
+                                    <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $camp['id'] ?>" class="btn btn-primary"
                                         style="width: 100%;">Donate Now</a>
                                 </div>
                             </div>
@@ -299,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             alt="Build a School">
                     </div>
                     <div class="campaign-content">
-                        <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase;">Verified Field Node: Education First</div>
+                        <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase;">Verified Partner NGO: Education First</div>
                         <h3>Build a School in Rural Kenya</h3>
                         <div class="progress-container">
                             <div class="progress-stats">
@@ -321,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             alt="Medical Supplies">
                     </div>
                     <div class="campaign-content">
-                        <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase;">Verified Field Node: HealthBridge</div>
+                        <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase;">Verified Partner NGO: HealthBridge</div>
                         <h3>Emergency Medical Supplies Delivery</h3>
                         <div class="progress-container">
                             <div class="progress-stats">
@@ -343,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             alt="Flood Relief">
                     </div>
                     <div class="campaign-content">
-                        <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase;">Verified Field Node: Global Rescue</div>
+                        <div class="ngo-name" style="font-weight: 700; color: var(--text-main); font-size: 0.8rem; text-transform: uppercase;">Verified Partner NGO: Global Rescue</div>
                         <h3>Flood Relief Operations - Southeast Asia</h3>
                         <div class="progress-container">
                             <div class="progress-stats">
@@ -387,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="carousel-container" id="carouselContainer" style="overflow: hidden; border-radius: var(--radius-lg);">
                         <div class="carousel-track" id="carouselTrack" style="display: flex; gap: 1.5rem; transition: transform 0.4s ease-out;">
                             <?php foreach ($all_updates as $ann): ?>
-                                <a href="/share_hope/message_detail.php?id=<?= $ann['id'] ?>" style="text-decoration: none; flex: 0 0 100%; min-width: 100%;">
+                                <a href="<?= BASE_URL ?>/message_detail.php?id=<?= $ann['id'] ?>" style="text-decoration: none; flex: 0 0 100%; min-width: 100%;">
                                     <div class="announcement-card" style="flex: 0 0 100%; min-width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='var(--shadow-md)'; this.style.borderColor='var(--primary)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)'; this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
                                         <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
                                             <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 217, 255, 0.1)); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">

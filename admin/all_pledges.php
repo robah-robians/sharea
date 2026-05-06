@@ -13,7 +13,7 @@ require_once __DIR__ . '/../includes/activity_logger.php';
 require_once __DIR__ . '/../includes/security.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -105,7 +105,7 @@ $ngo_list = $ngo_stmt->fetchAll();
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
 
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
@@ -116,7 +116,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <h1 style="font-size: 2rem; margin: 0;"><i class="fa-solid fa-hand-holding-heart" style="color: var(--accent); margin-right: 0.5rem;"></i>All In-Kind Pledges</h1>
                     <p style="color: var(--text-muted); margin: 0.5rem 0 0 0;">Complete pledge history and status management</p>
                 </div>
-                <a href="/share_hope/admin/donations.php<?= !empty($_GET['ngo']) ? '?ngo=' . $_GET['ngo'] : '' ?>" class="btn btn-outline">
+                <a href="<?= BASE_URL ?>/admin/donations.php<?= !empty($_GET['ngo']) ? '?ngo=' . $_GET['ngo'] : '' ?>" class="btn btn-outline">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
                 </a>
             </div>
@@ -210,7 +210,7 @@ require_once __DIR__ . '/../includes/header.php';
                                             <?= h($pledge['campaign_title']) ?>
                                         </td>
                                         <td style="padding: 1rem 1.5rem;">
-                                            <form method="POST" action="/share_hope/actions/update_pledge_status.php" style="margin: 0;">
+                                            <form method="POST" action="<?= BASE_URL ?>/actions/update_pledge_status.php" style="margin: 0;">
                                                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                 <input type="hidden" name="pledge_id" value="<?= $pledge['id'] ?>">
                                                 <input type="hidden" name="redirect" value="all_pledges">

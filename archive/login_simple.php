@@ -9,7 +9,7 @@ unset($_SESSION['error']);
 <html>
 <head>
     <title>Login - Share Hope</title>
-    <link rel="stylesheet" href="/share_hope/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
 </head>
 <body>
     <div class="container" style="padding: 4rem 0;">
@@ -22,7 +22,7 @@ unset($_SESSION['error']);
                 </div>
             <?php endif; ?>
             
-            <form action="/share_hope/actions/login_action.php" method="POST">
+            <form action="<?= BASE_URL ?>/actions/login_action.php" method="POST">
                 <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
                 
                 <div style="margin-bottom: 1rem;">
@@ -41,11 +41,11 @@ unset($_SESSION['error']);
             </form>
             
             <div style="text-align: center; margin-top: 1rem;">
-                <a href="/share_hope/register.php">Don't have an account? Register here</a>
+                <a href="<?= BASE_URL ?>/register.php">Don't have an account? Register here</a>
             </div>
             
             <div style="text-align: center; margin-top: 1rem;">
-                <a href="/share_hope/index_simple.php">← Back to Home</a>
+                <a href="<?= BASE_URL ?>/index_simple.php">← Back to Home</a>
             </div>
         </div>
     </div>

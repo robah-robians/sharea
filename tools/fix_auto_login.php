@@ -81,9 +81,9 @@ session_regenerate_id(true);
         </div>
         
         <div style="text-align: center; margin-top: 2rem;">
-            <a href="/share_hope/" class="btn">🏠 Go to Home Page</a>
-            <a href="/share_hope/login.php" class="btn">🔐 Login Page</a>
-            <a href="/share_hope/debug_session.php" class="btn">🔍 Debug Session</a>
+            <a href="<?= BASE_URL ?>/" class="btn">🏠 Go to Home Page</a>
+            <a href="<?= BASE_URL ?>/login.php" class="btn">🔐 Login Page</a>
+            <a href="<?= BASE_URL ?>/debug_session.php" class="btn">🔍 Debug Session</a>
         </div>
         
         <div class="info" style="margin-top: 2rem;">

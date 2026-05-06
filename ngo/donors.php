@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'ngo') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -16,7 +16,7 @@ $ngo = $stmt->fetch();
 
 if (!$ngo) {
     $_SESSION['error'] = "NGO profile not found.";
-    header("Location: /share_hope/ngo/dashboard.php");
+    header("Location: " . BASE_URL . "/ngo/dashboard.php");
     exit;
 }
 

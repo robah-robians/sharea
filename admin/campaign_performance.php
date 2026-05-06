@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -60,7 +60,7 @@ $stmt = $pdo->query("
 $stats = $stmt->fetch();
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
 
@@ -164,7 +164,7 @@ $stats = $stmt->fetch();
                                             </span>
                                         </td>
                                         <td style="padding: 1rem 1.5rem;">
-                                            <a href="/share_hope/donate.php?campaign_id=<?= $camp['id'] ?>" class="text-primary" style="text-decoration: none; font-weight: 500; white-space: nowrap;">
+                                            <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $camp['id'] ?>" class="text-primary" style="text-decoration: none; font-weight: 500; white-space: nowrap;">
                                                 <i class="fa-solid fa-external-link"></i> View
                                             </a>
                                         </td>

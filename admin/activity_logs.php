@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -73,7 +73,7 @@ $stmt->execute([(int)$filter_days]);
 $action_breakdown = $stmt->fetchAll();
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
 
@@ -157,7 +157,7 @@ $action_breakdown = $stmt->fetchAll();
                         <thead>
                             <tr style="border-bottom: 1px solid var(--border); background: var(--background); font-size: 0.875rem; color: var(--text-muted);">
                                 <th style="padding: 1rem 1.5rem;">Timestamp</th>
-                                <th style="padding: 1rem 1.5rem;">Admin Node</th>
+                                <th style="padding: 1rem 1.5rem;">Administrator</th>
                                 <th style="padding: 1rem 1.5rem;">Action Type</th>
                                 <th style="padding: 1rem 1.5rem;">Entity Source</th>
                                 <th style="padding: 1rem 1.5rem;">Payload Details</th>

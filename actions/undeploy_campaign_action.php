@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /share_hope/admin/campaigns_hub.php");
+    header("Location: " . BASE_URL . "/admin/campaigns_hub.php");
     exit;
 }
 
@@ -13,12 +13,20 @@ verify_csrf_token($_POST['csrf_token'] ?? '');
 // Admin only
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
     $_SESSION['error'] = "Unauthorized. Admin access required.";
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
+// RBAC Enforcement: Assistant Admins (Level 1) cannot perform write actions
+if (($_SESSION['role_level'] ?? 1) < 2) {
+    $_SESSION['error'] = 'Unauthorized action. Assistant Admins have read-only access.';
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/dashboard.php'));
+    exit;
+}
+
+
 $campaign_id = intval($_POST['campaign_id'] ?? 0);
-$redirect    = $_POST['redirect_url'] ?? "/share_hope/admin/campaigns_hub.php?tab=performance";
+$redirect    = $_POST['redirect_url'] ?? BASE_URL . "/admin/campaigns_hub.php?tab=performance";
 
 if (!$campaign_id) {
     $_SESSION['error'] = "Invalid initiative ID.";

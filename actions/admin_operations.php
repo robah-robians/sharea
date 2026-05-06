@@ -3,12 +3,20 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header('Location: /share_hope/login.php');
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
+// RBAC Enforcement: Assistant Admins (Level 1) cannot perform write actions
+if (($_SESSION['role_level'] ?? 1) < 2) {
+    $_SESSION['error'] = 'Unauthorized action. Assistant Admins have read-only access.';
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? BASE_URL . '/admin/dashboard.php'));
+    exit;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /share_hope/admin/operations.php');
+    header("Location: " . BASE_URL . "/admin/operations.php");
     exit;
 }
 
@@ -40,14 +48,14 @@ switch ($operation) {
     case 'restore_db':
         if (($_POST['confirm_restore'] ?? '') !== '1') {
             $_SESSION['operations_error'] = 'Restore confirmation is required.';
-            header('Location: /share_hope/admin/operations.php');
+            header("Location: " . BASE_URL . "/admin/operations.php");
             exit;
         }
 
         $folderName = trim((string)($_POST['backup_folder'] ?? ''));
         if ($folderName === '' || preg_match('/[^a-zA-Z0-9_\-]/', $folderName)) {
             $_SESSION['operations_error'] = 'Invalid backup folder selected.';
-            header('Location: /share_hope/admin/operations.php');
+            header("Location: " . BASE_URL . "/admin/operations.php");
             exit;
         }
         $backupFolderPath = realpath($projectRoot . DIRECTORY_SEPARATOR . 'backups' . DIRECTORY_SEPARATOR . $folderName);
@@ -55,7 +63,7 @@ switch ($operation) {
 
         if (!$backupFolderPath || !$backupsRoot || strpos($backupFolderPath, $backupsRoot) !== 0 || !is_dir($backupFolderPath)) {
             $_SESSION['operations_error'] = 'Backup folder not found.';
-            header('Location: /share_hope/admin/operations.php');
+            header("Location: " . BASE_URL . "/admin/operations.php");
             exit;
         }
 
@@ -63,7 +71,7 @@ switch ($operation) {
         break;
     default:
         $_SESSION['operations_error'] = 'Unknown operation requested.';
-        header('Location: /share_hope/admin/operations.php');
+        header("Location: " . BASE_URL . "/admin/operations.php");
         exit;
 }
 
@@ -76,5 +84,5 @@ if ($code === 0) {
     $_SESSION['operations_error'] = 'Operation failed. Check output below.';
 }
 
-header('Location: /share_hope/admin/operations.php');
+header("Location: " . BASE_URL . "/admin/operations.php");
 exit;

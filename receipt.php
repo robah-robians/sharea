@@ -101,7 +101,7 @@ if (!$donation) {
 
         <div style="text-align: center; margin-top: 3rem;">
             <button onclick="window.print()" class="btn btn-outline"><i class="fa-solid fa-print"></i> Print PDF</button>
-            <a href="/share_hope/campaigns.php" class="btn btn-primary" style="margin-left: 1rem;">Back to Campaigns</a>
+            <a href="<?= BASE_URL ?>/campaigns.php" class="btn btn-primary" style="margin-left: 1rem;">Back to Campaigns</a>
         </div>
     </div>
 </div>

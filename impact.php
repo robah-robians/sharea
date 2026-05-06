@@ -65,7 +65,7 @@ $recent_ledger = $stmt->fetchAll();
                 <div style="padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-sm); text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
                     <i class="fa-solid fa-shield-check text-accent" style="font-size: 2.25rem; margin-bottom: 0.75rem;"></i>
                     <div style="font-size: 2.25rem; font-weight: 800; color: var(--text-main);"><?= number_format($verified_ngos) ?></div>
-                    <div style="text-transform: uppercase; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); letter-spacing: 1px;">Verified Nodes (NGOs)</div>
+                    <div style="text-transform: uppercase; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); letter-spacing: 1px;">Verified Partner NGOs</div>
                 </div>
             </div>
             
@@ -82,9 +82,9 @@ $recent_ledger = $stmt->fetchAll();
                 }).addTo(map);
 
                 // Improvised Campaign Deployment points
-                L.marker([-1.2921, 36.8219]).addTo(map).bindPopup('<div style="font-family: var(--font-primary)"><b style="color:var(--primary);">Nairobi Node</b><br>Clean Water Initiative<br><span style="color:var(--text-muted); font-size: 0.8rem;">Status: Active</span></div>');
-                L.marker([-0.0917, 34.7680]).addTo(map).bindPopup('<div style="font-family: var(--font-primary)"><b style="color:var(--primary);">Kisumu Node</b><br>Youth Education Drive<br><span style="color:var(--text-muted); font-size: 0.8rem;">Status: Active</span></div>');
-                L.marker([-4.0435, 39.6682]).addTo(map).bindPopup('<div style="font-family: var(--font-primary)"><b style="color:var(--primary);">Mombasa Node</b><br>Coastal Relief<br><span style="color:var(--text-muted); font-size: 0.8rem;">Status: Active</span></div>');
+                L.marker([-1.2921, 36.8219]).addTo(map).bindPopup('<div style="font-family: var(--font-primary)"><b style="color:var(--primary);">Nairobi Partner NGO</b><br>Clean Water Initiative<br><span style="color:var(--text-muted); font-size: 0.8rem;">Status: Active</span></div>');
+                L.marker([-0.0917, 34.7680]).addTo(map).bindPopup('<div style="font-family: var(--font-primary)"><b style="color:var(--primary);">Kisumu Partner NGO</b><br>Youth Education Drive<br><span style="color:var(--text-muted); font-size: 0.8rem;">Status: Active</span></div>');
+                L.marker([-4.0435, 39.6682]).addTo(map).bindPopup('<div style="font-family: var(--font-primary)"><b style="color:var(--primary);">Mombasa Partner NGO</b><br>Coastal Relief<br><span style="color:var(--text-muted); font-size: 0.8rem;">Status: Active</span></div>');
 
                 setTimeout(function () { map.invalidateSize(); }, 500);
             });

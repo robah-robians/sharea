@@ -112,7 +112,7 @@ $updates = $stmt->fetchAll();
             </div>
 
             <!-- Financial Donation Form -->
-            <form id="financial-form" action="/share_hope/payment.php" method="POST" style="background: var(--surface); padding: 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--primary); position: sticky; top: 2rem; display: block;">
+            <form id="financial-form" action="<?= BASE_URL ?>/payment.php" method="POST" style="background: var(--surface); padding: 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--primary); position: sticky; top: 2rem; display: block;">
                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                 <input type="hidden" name="campaign_id" value="<?= h($campaign['id']) ?>">
 
@@ -172,7 +172,7 @@ $updates = $stmt->fetchAll();
             </form>
 
             <!-- In-Kind / Pledge Form -->
-            <form id="pledge-form" action="/share_hope/actions/process_inkind.php" method="POST" style="background: var(--surface); padding: 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 2px solid var(--accent); position: sticky; top: 2rem; display: none;">
+            <form id="pledge-form" action="<?= BASE_URL ?>/actions/process_inkind.php" method="POST" style="background: var(--surface); padding: 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 2px solid var(--accent); position: sticky; top: 2rem; display: none;">
                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                 <input type="hidden" name="campaign_id" value="<?= h($campaign['id']) ?>">
 

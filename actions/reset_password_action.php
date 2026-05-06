@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -15,7 +15,7 @@ $confirm_password = $_POST['confirm_password'] ?? '';
 
 if (empty($token) || empty($password) || $password !== $confirm_password || strlen($password) < 8) {
     $_SESSION['error'] = "Passwords must match and be at least 8 characters long.";
-    header("Location: /share_hope/reset_password.php?token=" . urlencode($token));
+    header("Location: ' . BASE_URL . '/reset_password.php?token=" . urlencode($token));
     exit;
 }
 
@@ -27,7 +27,7 @@ try {
 
     if (!$user) {
         $_SESSION['error'] = "The reset link is invalid or has expired. Please request a new one.";
-        header("Location: /share_hope/forgot_password.php");
+        header("Location: " . BASE_URL . "/forgot_password.php");
         exit;
     }
 
@@ -37,11 +37,11 @@ try {
     $stmt->execute([$new_hash, $user['id']]);
 
     $_SESSION['success'] = "Your password has been successfully reset! You can now log in.";
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 
 } catch (Exception $e) {
     $_SESSION['error'] = "System Error. Please try again.";
-    header("Location: /share_hope/forgot_password.php");
+    header("Location: " . BASE_URL . "/forgot_password.php");
     exit;
 }

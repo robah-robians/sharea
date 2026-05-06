@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'ngo') {
-    header("Location: /share_hope/login.php"); exit;
+    header("Location: " . BASE_URL . "/login.php"); exit;
 }
 require_once __DIR__ . '/../includes/header.php';
 
@@ -10,7 +10,7 @@ $stmt = $pdo->prepare("SELECT * FROM ngos WHERE user_id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $ngo = $stmt->fetch();
 if (!$ngo || !$ngo['is_verified']) {
-    header("Location: /share_hope/ngo/dashboard.php"); exit;
+    header("Location: " . BASE_URL . "/ngo/dashboard.php"); exit;
 }
 
 $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
@@ -28,7 +28,7 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
                         Your proposal will be reviewed by the admin. If approved, they will create and publish the campaign and credit your organisation.
                     </p>
                 </div>
-                <a href="/share_hope/ngo/dashboard.php" class="btn btn-outline">
+                <a href="<?= BASE_URL ?>/ngo/dashboard.php" class="btn btn-outline">
                     <i class="fa-solid fa-arrow-left" style="margin-right: 0.35rem;"></i> Back to Dashboard
                 </a>
             </div>
@@ -59,7 +59,7 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
                         <i class="fa-solid fa-bolt text-accent" style="margin-right:0.5rem;"></i>Campaign Proposal Details
                     </h3>
                 </div>
-                <form action="/share_hope/actions/submit_campaign_request.php" method="POST" enctype="multipart/form-data" style="padding:2rem;">
+                <form action="<?= BASE_URL ?>/actions/submit_campaign_request.php" method="POST" enctype="multipart/form-data" style="padding:2rem;">
                     <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
 
                     <div class="form-group" style="margin-bottom:1.5rem;">
@@ -100,7 +100,7 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
                     </div>
 
                     <div style="display:flex;gap:1rem;justify-content:flex-end;border-top:1px solid var(--border);padding-top:1.5rem;">
-                        <a href="/share_hope/ngo/dashboard.php" class="btn btn-outline" style="padding:0.75rem 1.5rem;">Cancel</a>
+                        <a href="<?= BASE_URL ?>/ngo/dashboard.php" class="btn btn-outline" style="padding:0.75rem 1.5rem;">Cancel</a>
                         <button type="submit" class="btn btn-primary" style="padding:0.75rem 1.5rem;">
                             <i class="fa-solid fa-paper-plane" style="margin-right:0.5rem;"></i>Submit Request to Admin
                         </button>

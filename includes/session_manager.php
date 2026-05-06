@@ -61,13 +61,13 @@ function require_auth($required_role = null) {
     
     if (!validate_session($pdo)) {
         $_SESSION['error'] = "Please log in to access this page.";
-        header("Location: /share_hope/login.php");
+        header("Location: " . BASE_URL . "/login.php");
         exit;
     }
     
     if ($required_role && $_SESSION['user_role'] !== $required_role) {
         $_SESSION['error'] = "Access denied. Insufficient permissions.";
-        header("Location: /share_hope/login.php");
+        header("Location: " . BASE_URL . "/login.php");
         exit;
     }
     

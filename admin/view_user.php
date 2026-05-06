@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -39,10 +39,10 @@ if ($user['role'] === 'donor' || $user['role'] === 'user') {
 }
 ?>
 
-<div class="container" style="padding: 4rem 0;">
+<div class="container" style="padding: 2.5rem 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <h1 style="margin: 0;">User Details</h1>
-        <a href="/share_hope/admin/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
+        <a href="<?= BASE_URL ?>/admin/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
     </div>
 
     <div
@@ -115,7 +115,7 @@ if ($user['role'] === 'donor' || $user['role'] === 'user') {
                                 <?= number_format($don['amount'], 2) ?>
                             </td>
                             <td data-label="Receipt" style="padding: 1rem 1.5rem;">
-                                <a href="/share_hope/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline"
+                                <a href="<?= BASE_URL ?>/receipt.php?id=<?= $don['id'] ?>" class="btn btn-outline"
                                     style="padding: 0.25rem 0.75rem; font-size: 0.75rem;"><i class="fa-solid fa-file-pdf"></i>
                                     View</a>
                             </td>

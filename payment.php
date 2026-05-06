@@ -4,7 +4,7 @@ require_once __DIR__ . '/includes/header.php';
 
 // Validate form data
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /share_hope/');
+    header("Location: " . BASE_URL . "/");
     exit;
 }
 
@@ -28,7 +28,7 @@ if ($campaign_type === 'awareness') {
 
 if (!$campaign) {
     $_SESSION['error'] = 'Campaign not found.';
-    header('Location: /share_hope/');
+    header("Location: " . BASE_URL . "/");
     exit;
 }
 
@@ -83,7 +83,7 @@ $_SESSION['payment_data'] = [
 
     <?php if ($payment_method === 'mpesa'): ?>
         <!-- M-Pesa Payment Form -->
-        <form action="/share_hope/actions/process_payment.php" method="POST" style="background: var(--surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--secondary);">
+        <form action="<?= BASE_URL ?>/actions/process_payment.php" method="POST" style="background: var(--surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--secondary);">
             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
             
             <h3 style="margin: 0 0 1.5rem; color: var(--secondary);">
@@ -142,7 +142,7 @@ $_SESSION['payment_data'] = [
 
     <?php else: ?>
         <!-- Card Payment Form -->
-        <form action="/share_hope/actions/process_payment.php" method="POST" style="background: var(--surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--primary);">
+        <form action="<?= BASE_URL ?>/actions/process_payment.php" method="POST" style="background: var(--surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--primary);">
             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
             
             <h3 style="margin: 0 0 1.5rem; color: var(--primary);">
@@ -181,7 +181,7 @@ $_SESSION['payment_data'] = [
     <?php endif; ?>
 
     <div style="text-align: center; margin-top: 2rem;">
-        <a href="/share_hope/donate.php?campaign_id=<?= $campaign_id ?><?= $campaign_type === 'awareness' ? '&type=awareness' : '' ?>" 
+        <a href="<?= BASE_URL ?>/donate.php?campaign_id=<?= $campaign_id ?><?= $campaign_type === 'awareness' ? '&type=awareness' : '' ?>" 
            class="btn btn-outline" style="padding: 0.75rem 1.5rem;">
             <i class="fa-solid fa-arrow-left" style="margin-right: 0.5rem;"></i>Back to Campaign
         </a>

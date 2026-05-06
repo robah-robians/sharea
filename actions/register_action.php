@@ -4,7 +4,7 @@ require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/security.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /share_hope/register.php");
+    header("Location: " . BASE_URL . "/register.php");
     exit;
 }
 
@@ -20,28 +20,20 @@ $mission = trim($_POST['mission'] ?? '');
 // Basic validation
 if (empty($name) || empty($email) || empty($password)) {
     $_SESSION['error'] = "Please fill in all required fields.";
-    header("Location: /share_hope/register.php?role=$role");
+    header("Location: " . BASE_URL . "/register.php?role=$role");
+    exit;
+}
+
+$password_check = validate_password_strength($password);
+if (!$password_check['valid']) {
+    $_SESSION['error'] = implode("<br>", $password_check['errors']);
+    header("Location: " . BASE_URL . "/register.php?role=$role");
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['error'] = "Invalid email format.";
-    header("Location: /share_hope/register.php?role=$role");
-    exit;
-}
-
-// Validate phone number if provided
-if (!empty($phone) && !preg_match('/^[0-9+\-\s()]{10,15}$/', $phone)) {
-    $_SESSION['error'] = "Invalid phone number format. Use 10-15 digits with optional +, -, spaces, or parentheses.";
-    header("Location: /share_hope/register.php?role=$role");
-    exit;
-}
-
-// Validate password strength
-$pwd_validation = validate_password_strength($password);
-if (!$pwd_validation['valid']) {
-    $_SESSION['error'] = implode("<br>", $pwd_validation['errors']);
-    header("Location: /share_hope/register.php?role=$role");
+    header("Location: " . BASE_URL . "/register.php?role=$role");
     exit;
 }
 
@@ -54,15 +46,15 @@ try {
     if ($stmt->fetch()) {
         $_SESSION['error'] = "An account with this email already exists.";
         $pdo->rollBack();
-        header("Location: /share_hope/register.php?role=$role");
+        header("Location: " . BASE_URL . "/register.php?role=$role");
         exit;
     }
 
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
-    $status = 'active';
+    $status = 'active'; // Admin could suspend later
     
-    // Insert User - email_verified defaults to 0
-    $stmt = $pdo->prepare("INSERT INTO users (role, name, email, phone, password_hash, status, email_verified) VALUES (?, ?, ?, ?, ?, ?, 0)");
+    // Insert User
+    $stmt = $pdo->prepare("INSERT INTO users (role, name, email, phone, password_hash, status) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$role, $name, $email, $phone, $password_hash, $status]);
     $user_id = $pdo->lastInsertId();
 
@@ -95,25 +87,14 @@ try {
         $stmt->execute([$user_id, $mission, $dbFilePath]);
     }
 
-    // Generate verification token and send email
-    // TEMPORARILY DISABLED FOR TESTING - ENABLE LATER
-    // $token = generate_verification_token($pdo, $user_id);
-    // if ($token) {
-    //     send_verification_email($email, $name, $token);
-    // }
-    
-    // TESTING: Auto-verify email on registration
-    $stmt = $pdo->prepare("UPDATE users SET email_verified = 1 WHERE id = ?");
-    $stmt->execute([$user_id]);
-
     $pdo->commit();
-    $_SESSION['success'] = "Registration successful! You can now log in.";
-    header("Location: /share_hope/login.php");
+    $_SESSION['success'] = "Registration successful. Please log in.";
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 
 } catch (Exception $e) {
     $pdo->rollBack();
     $_SESSION['error'] = "Registration failed: " . $e->getMessage();
-    header("Location: /share_hope/register.php?role=$role");
+    header("Location: " . BASE_URL . "/register.php?role=$role");
     exit;
 }

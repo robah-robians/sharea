@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -37,7 +37,7 @@ $stmt = $pdo->query("SELECT * FROM announcements ORDER BY created_at DESC");
 $announcements = $stmt->fetchAll();
 ?>
 
-<div style="padding: 4rem 0; max-width: none; margin: 0; width: 100%;">
+<div style="padding: 2.5rem 0; max-width: none; margin: 0; width: 100%;">
     <div class="admin-layout" style="display: flex; gap: 0; align-items: flex-start; margin: 0; padding: 0;">
 
         <!-- Sidebar -->
@@ -45,7 +45,7 @@ $announcements = $stmt->fetchAll();
             <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
         </div>
 
-        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1400px;">
+        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1150px;">
             <!-- Professional Header with Glitter Effect -->
             <div style="text-align: center; margin-bottom: 3rem; padding: 2rem; background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(192,192,192,0.1), rgba(255,165,0,0.1)); border-radius: var(--radius-lg); border: 1px solid var(--border);">
                 <h1 style="font-size: 3rem; margin: 0; background: linear-gradient(45deg, #FFD700, #C0C0C0, #FFA500, #FFD700, #C0C0C0); background-size: 400% 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: glitter 3s ease-in-out infinite; font-weight: 900; text-shadow: 0 0 30px rgba(255,215,0,0.3);">
@@ -199,7 +199,7 @@ $announcements = $stmt->fetchAll();
                                         
                                         <!-- Action Buttons -->
                                         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                                            <form action="/share_hope/actions/admin_moderate_announcement.php" method="POST" style="display: inline-block;">
+                                            <form action="<?= BASE_URL ?>/actions/admin_moderate_announcement.php" method="POST" style="display: inline-block;">
                                                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                 <input type="hidden" name="announcement_id" value="<?= $a['id'] ?>">
                                                 <button type="submit" name="mod_action" value="delete" class="btn" style="background: var(--danger); color: white; padding: 0.6rem 1.25rem; font-size: 0.9rem; border: none; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; font-weight: 600;" onMouseOver="this.style.transform='translateY(-1px)'; this.style.boxShadow='var(--shadow-sm)'" onMouseOut="this.style.transform='translateY(0)'; this.style.boxShadow='none'" onclick="return confirm('Remove this announcement from the system? This will permanently delete it from all user dashboards and cannot be undone.');">
@@ -208,7 +208,7 @@ $announcements = $stmt->fetchAll();
                                             </form>
                                             
                                             <?php if (!$a['is_public']): ?>
-                                                <form action="/share_hope/actions/admin_moderate_announcement.php" method="POST" style="display: inline-block;">
+                                                <form action="<?= BASE_URL ?>/actions/admin_moderate_announcement.php" method="POST" style="display: inline-block;">
                                                     <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                     <input type="hidden" name="announcement_id" value="<?= $a['id'] ?>">
                                                     <button type="submit" name="mod_action" value="publish" class="btn" style="background: var(--warning); color: white; padding: 0.6rem 1.25rem; font-size: 0.9rem; border: none; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; font-weight: 600;" onMouseOver="this.style.transform='translateY(-1px)'; this.style.boxShadow='var(--shadow-sm)'" onMouseOut="this.style.transform='translateY(0)'; this.style.boxShadow='none'">

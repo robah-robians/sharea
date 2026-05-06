@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 // Handle exports
@@ -89,6 +89,8 @@ if (!empty($_GET['export'])) {
     }
 }
 
+require_once __DIR__ . '/../includes/header.php';
+
 // Get stats
 $stmt = $pdo->query("SELECT SUM(amount) as total, COUNT(*) as count, AVG(amount) as avg FROM donations WHERE status = 'completed'");
 $donation_stats = $stmt->fetch();
@@ -146,7 +148,7 @@ $status_counts = array_map(fn($s) => $s['count'], $campaign_status);
             <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
         </div>
 
-        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1400px;">
+        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1150px;">
             <h1 style="font-size: 1.75rem; margin: 0 0 1.5rem 0;">Analytics Dashboard</h1>
 
             <!-- Quick Stats Grid -->

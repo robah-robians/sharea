@@ -23,7 +23,7 @@ require_once __DIR__ . '/includes/header.php';
             <?php unset($_SESSION['success']); ?>
         <?php endif; ?>
 
-        <form action="/share_hope/forgot_password_action.php" method="POST">
+        <form action="<?= BASE_URL ?>/forgot_password_action.php" method="POST">
             <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
 
             <div class="form-group">
@@ -33,7 +33,7 @@ require_once __DIR__ . '/includes/header.php';
 
             <button type="submit" class="btn btn-primary" style="width: 100%;">Send Reset Link</button>
             <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">
-                Remember your password? <a href="/share_hope/login.php" class="text-primary"
+                Remember your password? <a href="<?= BASE_URL ?>/login.php" class="text-primary"
                     style="font-weight: 500;">Log in here</a>.
             </p>
         </form>

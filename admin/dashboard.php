@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header('Location: /share_hope/login.php');
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -37,19 +37,32 @@ try {
     $unverified_ngos_count = 0;
 }
 ?>
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1200px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         <!-- Sidebar Navigation -->
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
         
         <!-- Main Content -->
         <div class="admin-main" style="flex: 1; min-width: 0;">
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div style="background: #DCFCE7; border-left: 4px solid #10B981; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; color: #166534;">
+                    <i class="fa-solid fa-circle-check"></i> <?= h($_SESSION['success']) ?>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['error'])): ?>
+                <div style="background: #FEE2E2; border-left: 4px solid #EF4444; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; color: #991B1B;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <?= h($_SESSION['error']) ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
             
             <!-- System Marquee -->
             <div style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 2.5rem; box-shadow: var(--shadow-md); border-left: 4px solid var(--accent);">
                 <marquee scrollamount="5" style="font-size: 0.95rem; font-weight: 500; font-family: monospace;">
                     <i class="fa-solid fa-satellite-dish"></i> 
-                    SYS_MSG: Welcome Global Administrator. System uptime: 99.9%. All secure nodes operating nominally. 
+                    SYS_MSG: Welcome Global Administrator. System uptime: 99.9%. All partner NGOs and systems are operating normally. 
                     Verified NGOs: <?= number_format((int)$stats['verified_ngos']) ?>. 
                     Live tracking active across <?= number_format((int)$stats['active_campaigns']) ?> campaigns.
                 </marquee>
@@ -138,6 +151,14 @@ try {
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Audit flagged activity</div>
                     </div>
                 </a>
+
+                <a href="staff.php" style="background: var(--surface); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem; transition: all 0.2s; text-decoration: none;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)';" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)';">
+                    <div style="width: 50px; height: 50px; background: rgba(30, 58, 138, 0.1); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;"><i class="fa-solid fa-users-gear"></i></div>
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Staff Manager</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Promote or demote admins</div>
+                    </div>
+                </a>
             </div>
 
             <!-- === NGO Campaign Requests Inbox === -->
@@ -188,12 +209,21 @@ try {
                                     <td style="padding:1rem 1.5rem;text-align:right;">
                                         <div style="display:flex;gap:0.4rem;justify-content:flex-end;flex-wrap:wrap;">
                                             <!-- Approve → pre-fill Deploy form -->
-                                            <form method="POST" action="/share_hope/actions/admin_review_campaign_request.php" style="display:inline;">
+                                            <form method="POST" action="<?= BASE_URL ?>/actions/admin_review_campaign_request.php" style="display:inline;">
                                                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                 <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
                                                 <input type="hidden" name="action" value="approve">
                                                 <button type="submit" class="btn btn-primary" style="padding:0.35rem 0.75rem;font-size:0.75rem;" title="Approve & deploy">
                                                     <i class="fa-solid fa-rocket"></i> Approve & Deploy
+                                                </button>
+                                            </form>
+                                            <!-- Under Consideration -->
+                                            <form method="POST" action="<?= BASE_URL ?>/actions/admin_review_campaign_request.php" style="display:inline;">
+                                                <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
+                                                <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
+                                                <input type="hidden" name="action" value="consider">
+                                                <button type="submit" class="btn" style="padding:0.35rem 0.75rem;font-size:0.75rem;background:rgba(245,158,11,0.1);color:var(--accent);border:1px solid rgba(245,158,11,0.3);" title="Mark as under consideration">
+                                                    <i class="fa-solid fa-hourglass-half"></i> Consider
                                                 </button>
                                             </form>
                                             <!-- Reject -->
@@ -202,7 +232,7 @@ try {
                                             </button>
                                         </div>
                                         <div id="reject-box-<?= $req['id'] ?>" style="display:none;margin-top:0.5rem;">
-                                            <form method="POST" action="/share_hope/actions/admin_review_campaign_request.php">
+                                            <form method="POST" action="<?= BASE_URL ?>/actions/admin_review_campaign_request.php">
                                                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                 <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
                                                 <input type="hidden" name="action" value="reject">

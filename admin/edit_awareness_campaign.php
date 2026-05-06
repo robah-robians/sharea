@@ -4,12 +4,12 @@ require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
 $campaign_id = intval($_GET['id'] ?? 0);
-$redirect    = "/share_hope/admin/awareness_campaigns.php";
+$redirect    = BASE_URL . "/admin/awareness_campaigns.php";
 
 if (!$campaign_id) {
     $_SESSION['error'] = "Invalid campaign ID.";
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
             $filename = 'awareness_' . time() . '_' . uniqid() . '.' . $ext;
             if (move_uploaded_file($_FILES['campaign_image']['tmp_name'], $upload_dir . $filename)) {
-                $image_url = '/share_hope/assets/uploads/images/' . $filename;
+                $image_url = BASE_URL . '/assets/uploads/images/' . $filename;
             }
         }
     }
@@ -84,7 +84,7 @@ if (!$campaign) {
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
 
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
@@ -99,7 +99,7 @@ require_once __DIR__ . '/../includes/header.php';
                         Modifying: <strong style="color: var(--accent);"><?= h($campaign['title']) ?></strong>
                     </p>
                 </div>
-                <a href="/share_hope/admin/awareness_campaigns.php" class="btn btn-outline" style="padding: 0.6rem 1.25rem;">
+                <a href="<?= BASE_URL ?>/admin/awareness_campaigns.php" class="btn btn-outline" style="padding: 0.6rem 1.25rem;">
                     <i class="fa-solid fa-arrow-left" style="margin-right: 0.35rem;"></i> Back to Hub
                 </a>
             </div>
@@ -195,7 +195,7 @@ require_once __DIR__ . '/../includes/header.php';
                     </div>
 
                     <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                        <a href="/share_hope/admin/awareness_campaigns.php" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">Cancel</a>
+                        <a href="<?= BASE_URL ?>/admin/awareness_campaigns.php" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">Cancel</a>
                         <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">
                             <i class="fa-solid fa-save" style="margin-right: 0.5rem;"></i>Save Changes
                         </button>

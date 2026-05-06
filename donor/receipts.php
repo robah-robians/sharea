@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -79,7 +79,7 @@ $user = $stmt->fetch();
                     <i class="fa-solid fa-receipt" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
                     <h3>No Receipts Available</h3>
                     <p>Complete donations will generate tax-deductible receipts here.</p>
-                    <a href="/share_hope/donor/find_campaigns.php" class="btn btn-primary" style="margin-top: 1rem;">
+                    <a href="<?= BASE_URL ?>/donor/find_campaigns.php" class="btn btn-primary" style="margin-top: 1rem;">
                         <i class="fa-solid fa-search"></i> Find Campaigns to Support
                     </a>
                 </div>
@@ -116,7 +116,7 @@ $user = $stmt->fetch();
                                         Tax Deductible
                                     </div>
                                 </div>
-                                <a href="/share_hope/donation_receipt.php?id=<?= $donation['id'] ?>" target="_blank" class="btn btn-outline">
+                                <a href="<?= BASE_URL ?>/donation_receipt.php?id=<?= $donation['id'] ?>" target="_blank" class="btn btn-outline">
                                     <i class="fa-solid fa-download"></i> Download
                                 </a>
                             </div>

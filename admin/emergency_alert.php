@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -35,7 +35,7 @@ $stmt = $pdo->query("SELECT * FROM announcements WHERE is_public = 1 ORDER BY cr
 $emergencies = $stmt->fetchAll();
 ?>
 
-<div style="padding: 4rem 0; max-width: none; margin: 0; width: 100%;">
+<div style="padding: 2.5rem 0; max-width: none; margin: 0; width: 100%;">
     <div class="admin-layout" style="display: flex; gap: 0; align-items: flex-start; margin: 0; padding: 0;">
 
         <!-- Sidebar -->
@@ -43,7 +43,7 @@ $emergencies = $stmt->fetchAll();
             <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
         </div>
 
-        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1400px;">
+        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1150px;">
             <!-- Emergency Header -->
             <div style="text-align: center; margin-bottom: 3rem; padding: 2rem; background: linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.15)); border-radius: var(--radius-lg); border: 2px solid var(--danger); position: relative; overflow: hidden;">
                 <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(220,38,38,0.05) 10px, rgba(220,38,38,0.05) 20px); pointer-events: none;"></div>

@@ -10,7 +10,7 @@ verify_csrf_token($_POST['csrf_token'] ?? '');
 $payment_data = $_SESSION['payment_data'] ?? null;
 if (!$payment_data) {
     $_SESSION['error'] = 'Payment session expired. Please try again.';
-    header('Location: /share_hope/');
+    header("Location: " . BASE_URL . "/");
     exit;
 }
 
@@ -68,7 +68,7 @@ try {
         $_SESSION['success'] = "Payment successful! Your M-Pesa transaction reference is: $transaction_ref";
         $_SESSION['donation_id'] = $donation_id;
         
-        header('Location: /share_hope/payment_success.php');
+        header("Location: " . BASE_URL . "/payment_success.php");
         exit;
         
     } else {
@@ -108,14 +108,14 @@ try {
         $_SESSION['success'] = "Payment successful! Your transaction reference is: $transaction_ref";
         $_SESSION['donation_id'] = $donation_id;
         
-        header('Location: /share_hope/payment_success.php');
+        header("Location: " . BASE_URL . "/payment_success.php");
         exit;
     }
     
 } catch (Exception $e) {
     $pdo->rollBack();
     $_SESSION['error'] = $e->getMessage();
-    header('Location: /share_hope/payment.php');
+    header("Location: " . BASE_URL . "/payment.php");
     exit;
 }
 ?>

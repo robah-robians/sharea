@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -109,7 +109,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endif; ?>
             </div>
 
-            <form action="/share_hope/actions/toggle_maintenance.php" method="POST"
+            <form action="<?= BASE_URL ?>/actions/toggle_maintenance.php" method="POST"
                 style="margin: 0; padding-left: 1rem; border-left: 1px solid var(--border);">
                 <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                 <?php if (file_exists(__DIR__ . '/../.maintenance_lock')): ?>
@@ -216,7 +216,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?= date('M j, Y', strtotime($usr['created_at'])) ?>
                             </td>
                             <td data-label="View Profile" style="padding: 1rem 1.5rem;">
-                                <a href="/share_hope/admin/view_user.php?id=<?= $usr['id'] ?>" class="btn btn-outline"
+                                <a href="<?= BASE_URL ?>/admin/view_user.php?id=<?= $usr['id'] ?>" class="btn btn-outline"
                                     style="padding: 0.25rem 0.75rem; font-size: 0.75rem;"><i class="fa-solid fa-eye"></i>
                                     Details</a>
                             </td>
@@ -262,7 +262,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php foreach ($pending_ngos as $ngo): ?>
                             <tr style="border-bottom: 1px solid var(--border);">
                                 <td data-label="Organization" style="padding: 1rem 1.5rem; font-weight: 500;">
-                                    <a href="/share_hope/ngo_profile.php?id=<?= $ngo['id'] ?>" style="color: var(--primary);">
+                                    <a href="<?= BASE_URL ?>/ngo_profile.php?id=<?= $ngo['id'] ?>" style="color: var(--primary);">
                                         <?= h($ngo['name']) ?>
                                     </a>
                                 </td>
@@ -279,14 +279,14 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?php endif; ?>
                                 </td>
                                 <td data-label="Action" style="padding: 1rem 1.5rem; display: flex; gap: 0.5rem;">
-                                    <form action="/share_hope/actions/admin_approve_ngo.php" method="POST">
+                                    <form action="<?= BASE_URL ?>/actions/admin_approve_ngo.php" method="POST">
                                         <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                         <input type="hidden" name="ngo_id" value="<?= $ngo['id'] ?>">
                                         <input type="hidden" name="action" value="approve">
                                         <button class="btn"
                                             style="padding: 0.5rem 1rem; font-size: 0.875rem; background: var(--secondary); color: white; border: none; cursor: pointer;">Approve</button>
                                     </form>
-                                    <form action="/share_hope/actions/admin_approve_ngo.php" method="POST"
+                                    <form action="<?= BASE_URL ?>/actions/admin_approve_ngo.php" method="POST"
                                         onsubmit="return confirm('Are you sure you want to reject and delete this application?');">
                                         <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                         <input type="hidden" name="ngo_id" value="<?= $ngo['id'] ?>">
@@ -340,7 +340,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
         <div
             style="padding: 1.5rem; border-bottom: 1px solid var(--border); background: var(--background); display: flex; justify-content: space-between; align-items: center;">
             <h3 style="margin: 0;">Recent Global Transactions</h3>
-            <a href="/share_hope/actions/export_admin.php" class="btn btn-outline"
+            <a href="<?= BASE_URL ?>/actions/export_admin.php" class="btn btn-outline"
                 style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i class="fa-solid fa-file-csv"></i> Export CSV</a>
         </div>
         <div style="overflow-x: auto;">
@@ -367,7 +367,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php if ($txn['is_anonymous']): ?>
                                     <em>Anonymous</em>
                                 <?php elseif ($txn['donor_id']): ?>
-                                    <a href="/share_hope/admin/view_user.php?id=<?= $txn['donor_id'] ?>"
+                                    <a href="<?= BASE_URL ?>/admin/view_user.php?id=<?= $txn['donor_id'] ?>"
                                         style="color: var(--primary); font-weight: 500;">
                                         <?= h($txn['donor_name'] ?? 'Guest') ?>
                                     </a>
@@ -377,7 +377,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                             </td>
                             <td data-label="NGO & Campaign" style="padding: 1rem 1.5rem;">
                                 <div style="font-weight: 500;">
-                                    <a href="/share_hope/ngo_profile.php?id=<?= $txn['ngo_id'] ?>"
+                                    <a href="<?= BASE_URL ?>/ngo_profile.php?id=<?= $txn['ngo_id'] ?>"
                                         style="color: var(--text-main);">
                                         <?= h($txn['ngo_name']) ?>
                                     </a>
@@ -397,7 +397,7 @@ $all_users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <span style="color: var(--secondary);"><i class="fa-solid fa-check"></i></span>
                             </td>
                             <td data-label="Receipt" style="padding: 1rem 1.5rem;">
-                                <a href="/share_hope/receipt.php?id=<?= $txn['id'] ?>" class="btn btn-outline"
+                                <a href="<?= BASE_URL ?>/receipt.php?id=<?= $txn['id'] ?>" class="btn btn-outline"
                                     style="padding: 0.25rem 0.75rem; font-size: 0.75rem;"><i
                                         class="fa-solid fa-file-pdf"></i> View</a>
                             </td>

@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../includes/activity_logger.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -77,7 +77,7 @@ $mod_txns = $pdo->query($sql)->fetchAll();
 $ngo_list = []; // Campaigns are admin-managed; no NGO filter applies
 ?>
 
-<div class="container" style="padding: 4rem 0; max-width: 1400px;">
+<div class="container" style="padding: 2.5rem 0; max-width: 1150px;">
     <div class="admin-layout" style="display: flex; gap: 2.5rem; align-items: flex-start;">
         
         <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
@@ -145,7 +145,7 @@ $ngo_list = []; // Campaigns are admin-managed; no NGO filter applies
                                             <td style="padding: 1.25rem 1.5rem; font-family: monospace; font-size: 0.75rem; color: var(--primary); font-weight: 600;"><?= h($txn['transaction_id']) ?></td>
                                             <td style="padding: 1.25rem 1.5rem; font-weight: 600; color: var(--text-main);"><?= h($txn['campaign_title']) ?></td>
                                             <td style="padding: 1.25rem 1.5rem; font-weight: 700; color: var(--secondary); font-size: 1.05rem;">$<?= number_format($txn['amount'], 2) ?></td>
-                                            <td style="padding: 1.25rem 1.5rem; text-align: right;"><a href="/share_hope/receipt.php?id=<?= $txn['id'] ?>" target="_blank" class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;"><i class="fa-solid fa-print"></i> Generate Receipt</a></td>
+                                            <td style="padding: 1.25rem 1.5rem; text-align: right;"><a href="<?= BASE_URL ?>/receipt.php?id=<?= $txn['id'] ?>" target="_blank" class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;"><i class="fa-solid fa-print"></i> Generate Receipt</a></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -195,7 +195,7 @@ $ngo_list = []; // Campaigns are admin-managed; no NGO filter applies
                                             <td style="padding: 1.25rem 1.5rem; text-align: right; position: relative;">
                                                 <button type="button" class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="toggleStatusMenu(this, <?= $pledge['id'] ?>)">Update Logic</button>
                                                 <div id="menu-<?= $pledge['id'] ?>" style="display: none; position: absolute; right: 2rem; top: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); z-index: 10; min-width: 150px; text-align: left;">
-                                                    <form method="POST" action="/share_hope/actions/update_pledge_status.php" style="margin: 0; display:flex; flex-direction: column;">
+                                                    <form method="POST" action="<?= BASE_URL ?>/actions/update_pledge_status.php" style="margin: 0; display:flex; flex-direction: column;">
                                                         <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                         <input type="hidden" name="pledge_id" value="<?= $pledge['id'] ?>">
                                                         <input type="hidden" name="redirect" value="finance_controls">
@@ -224,7 +224,7 @@ $ngo_list = []; // Campaigns are admin-managed; no NGO filter applies
                         <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
                             <input type="hidden" name="tab" value="audit">
                             <select name="view" class="form-control" style="width: auto; font-size: 0.85rem;">
-                                <option value="all" <?= $view_mod === 'all' ? 'selected' : '' ?>>🔍 Stream All Nodes</option>
+                                <option value="all" <?= $view_mod === 'all' ? 'selected' : '' ?>>🔍 Stream All Transactions</option>
                                 <option value="hidden" <?= $view_mod === 'hidden' ? 'selected' : '' ?>>👁️‍🗨️ Ghosted Transactions</option>
                                 <option value="flagged_or_voided" <?= $view_mod === 'flagged_or_voided' ? 'selected' : '' ?>>⚠️ Flagged Security Breaches</option>
                             </select>
@@ -275,7 +275,8 @@ $ngo_list = []; // Campaigns are admin-managed; no NGO filter applies
                                                 </div>
                                             </td>
                                             <td style="padding: 1.25rem 1.5rem; text-align: right;">
-                                                <form action="/share_hope/actions/admin_moderate_donation.php" method="POST" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; margin: 0;">
+                                                <?php if (($_SESSION['role_level'] ?? 1) >= 2): ?>
+                                                <form action="<?= BASE_URL ?>/actions/admin_moderate_donation.php" method="POST" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; margin: 0;">
                                                     <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
                                                     <input type="hidden" name="donation_id" value="<?= $txn['id'] ?>">
                                                     <input type="hidden" name="redirect" value="finance_controls">
@@ -298,6 +299,9 @@ $ngo_list = []; // Campaigns are admin-managed; no NGO filter applies
                                                         <button type="submit" name="action_type" value="void" class="btn btn-outline" style="padding: 0.35rem 0.65rem; font-size: 0.7rem; color: var(--danger); border-color: var(--danger);">Void Target</button>
                                                     <?php endif; ?>
                                                 </form>
+                                                <?php else: ?>
+                                                <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">Read-only mode</span>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

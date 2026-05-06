@@ -3,7 +3,7 @@ session_start();
 
 // Check if there's a success message BEFORE any output
 if (!isset($_SESSION['success']) || !isset($_SESSION['donation_id'])) {
-    header('Location: /share_hope/');
+    header("Location: " . BASE_URL . "/");
     exit;
 }
 
@@ -147,12 +147,12 @@ unset($_SESSION['success'], $_SESSION['donation_id']);
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-            <a href="/share_hope/donation_receipt.php?id=<?= $donation_id ?>" 
+            <a href="<?= BASE_URL ?>/donation_receipt.php?id=<?= $donation_id ?>" 
                class="btn btn-outline" style="text-align: center; padding: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease;">
                 <i class="fa-solid fa-download"></i>
                 <span>Download Receipt</span>
             </a>
-            <a href="/share_hope/campaigns.php" 
+            <a href="<?= BASE_URL ?>/campaigns.php" 
                class="btn btn-primary" style="text-align: center; padding: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--secondary); border-color: var(--secondary); transition: all 0.3s ease;">
                 <i class="fa-solid fa-heart"></i>
                 <span>Support More Causes</span>
@@ -184,7 +184,7 @@ unset($_SESSION['success'], $_SESSION['donation_id']);
     </div>
 
     <div style="text-align: center; margin-top: 2rem;">
-        <a href="/share_hope/" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">
+        <a href="<?= BASE_URL ?>/" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">
             <i class="fa-solid fa-home" style="margin-right: 0.5rem;"></i>Back to Home
         </a>
     </div>

@@ -1,7 +1,7 @@
 <?php
 // 1. header.php
 $header = file_get_contents('includes/header.php');
-$header = str_replace('href="/share_hope/ngos.php">Our NGOs</a>', 'href="/share_hope/impact.php">Impact</a>', $header);
+$header = str_replace('href="<?= BASE_URL ?>/ngos.php">Our NGOs</a>', 'href="<?= BASE_URL ?>/impact.php">Impact</a>', $header);
 file_put_contents('includes/header.php', $header);
 
 // 2. impact.php

@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'ngo') {
-    header("Location: /share_hope/login.php"); exit;
+    header("Location: " . BASE_URL . "/login.php"); exit;
 }
 verify_csrf_token($_POST['csrf_token'] ?? '');
 
@@ -14,7 +14,7 @@ $stmt->execute([$_SESSION['user_id']]);
 $ngo = $stmt->fetch();
 if (!$ngo) {
     $_SESSION['error'] = "Your NGO account must be verified before submitting campaign requests.";
-    header("Location: /share_hope/ngo/dashboard.php"); exit;
+    header("Location: " . BASE_URL . "/ngo/dashboard.php"); exit;
 }
 
 $title       = trim($_POST['title'] ?? '');
@@ -25,7 +25,7 @@ $category_id = intval($_POST['category_id'] ?? 0);
 
 if (empty($title) || empty($description) || $goal_amount < 100 || empty($deadline) || !$category_id) {
     $_SESSION['error'] = "All required fields must be completed.";
-    header("Location: /share_hope/ngo/submit_campaign.php"); exit;
+    header("Location: " . BASE_URL . "/ngo/submit_campaign.php"); exit;
 }
 
 // Handle image upload
@@ -37,7 +37,7 @@ if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR
     if (in_array($ext, ['jpg','jpeg','png'])) {
         $filename = 'req_' . uniqid() . '.' . $ext;
         if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename)) {
-            $image_url = '/share_hope/assets/uploads/campaigns/' . $filename;
+            $image_url = BASE_URL . '/assets/uploads/campaigns/' . $filename;
         }
     }
 }
@@ -57,8 +57,8 @@ try {
     }
 
     $_SESSION['success'] = "Your campaign request has been submitted successfully. The admin will review it shortly.";
-    header("Location: /share_hope/ngo/dashboard.php"); exit;
+    header("Location: " . BASE_URL . "/ngo/dashboard.php"); exit;
 } catch (Exception $e) {
     $_SESSION['error'] = "Failed to submit request: " . $e->getMessage();
-    header("Location: /share_hope/ngo/submit_campaign.php"); exit;
+    header("Location: " . BASE_URL . "/ngo/submit_campaign.php"); exit;
 }

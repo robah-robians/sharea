@@ -3,7 +3,7 @@ session_start();
 
 // Check authentication first
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'ngo') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -16,7 +16,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 // Verify session is still valid after header inclusion
 if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] !== $user_id) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 
@@ -31,7 +31,7 @@ if (!$ngo || !$ngo['is_verified']) {
                 <i class='fa-solid fa-hourglass-half' style='font-size: 3rem; margin-bottom: 1rem;'></i>
                 <h2>Account Pending Verification</h2>
                 <p>Your NGO account is currently under review by our administration team. You will be able to contribute to campaigns once verified.</p>
-                <a href='/share_hope/actions/logout_action.php' class='btn btn-outline' style='border-color: white; color: white; margin-top: 1rem;'>Log Out</a>
+                <a href=BASE_URL . '/actions/logout_action.php' class='btn btn-outline' style='border-color: white; color: white; margin-top: 1rem;'>Log Out</a>
             </div>
           </div>";
     require_once __DIR__ . '/../includes/footer.php';
@@ -68,7 +68,7 @@ $latest_announcement = $announcement_stmt->fetch();
                     <h1 style="margin:0 0 0.25rem 0;font-size:1.75rem;font-weight:800;color:var(--text-main);">NGO Dashboard</h1>
                     <p style="margin:0;color:var(--text-muted);font-size:0.95rem;">Welcome, <?= h($ngo['name'] ?? $user_name) ?></p>
                 </div>
-                <a href="/share_hope/ngo/submit_campaign.php" class="btn btn-primary" style="display:flex;align-items:center;gap:0.5rem;">
+                <a href="<?= BASE_URL ?>/ngo/submit_campaign.php" class="btn btn-primary" style="display:flex;align-items:center;gap:0.5rem;">
                     <i class="fa-solid fa-paper-plane"></i> Submit Campaign Request
                 </a>
             </div>
@@ -100,7 +100,7 @@ $latest_announcement = $announcement_stmt->fetch();
                             <i class="fa-solid fa-radar"></i>
                         </div>
                         <h4 style="margin: 0 0 1rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);">No Synchronized Operations</h4>
-                        <p style="color: var(--text-muted); margin-bottom: 0; font-size: 1rem; line-height: 1.6; max-width: 450px; margin-left: auto; margin-right: auto;">Your Node is currently in 'Standby' mode. The Central Administration will assign initiatives to your node based on field capability.</p>
+                        <p style="color: var(--text-muted); margin-bottom: 0; font-size: 1rem; line-height: 1.6; max-width: 450px; margin-left: auto; margin-right: auto;">Your NGO is currently in 'Standby' mode. The Central Administration will assign initiatives to your NGO based on field capability.</p>
                     </div>
                 <?php else: ?>
                     <div style="overflow-x: auto;">
@@ -185,11 +185,7 @@ $latest_announcement = $announcement_stmt->fetch();
                         </tbody>
                     </table>
                 </div>
-                <?php if (count($inkind_pledges) >= 5): ?>
-                    <div style="padding: 1rem; border-top: 1px solid var(--accent); text-align: center; background: rgba(245, 158, 11, 0.05);">
-                        <a href="/share_hope/ngo/pledges.php" class="btn btn-text" style="font-weight: 600; color: var(--accent);">View All Pledges <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
-                    </div>
-                <?php endif; ?>
+                <!-- Pledges link removed to enforce NGO limits -->
             </div>
             <?php endif; ?>
 
@@ -199,7 +195,7 @@ $latest_announcement = $announcement_stmt->fetch();
                     <h3 style="margin:0;font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;">
                         <i class="fa-solid fa-inbox text-primary"></i> My Campaign Requests
                     </h3>
-                    <a href="/share_hope/ngo/submit_campaign.php" class="btn btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;">
+                    <a href="<?= BASE_URL ?>/ngo/submit_campaign.php" class="btn btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;">
                         <i class="fa-solid fa-plus"></i> New Request
                     </a>
                 </div>
@@ -207,7 +203,7 @@ $latest_announcement = $announcement_stmt->fetch();
                     <div style="padding:2.5rem;text-align:center;color:var(--text-muted);">
                         <i class="fa-solid fa-paper-plane" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.75rem;"></i>
                         You haven't submitted any campaign requests yet.
-                        <br><a href="/share_hope/ngo/submit_campaign.php" class="btn btn-primary" style="margin-top:1rem;display:inline-block;">Submit Your First Request</a>
+                        <br><a href="<?= BASE_URL ?>/ngo/submit_campaign.php" class="btn btn-primary" style="margin-top:1rem;display:inline-block;">Submit Your First Request</a>
                     </div>
                 <?php else: ?>
                     <div style="overflow-x:auto;">

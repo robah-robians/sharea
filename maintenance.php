@@ -8,7 +8,7 @@ $lockFile = __DIR__ . '/.maintenance_lock';
 // If lockfile is gone, or if user is admin, redirect back to home
 $isAdmin = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'super_admin']);
 if (!file_exists($lockFile) || $isAdmin) {
-    header("Location: /share_hope/index.php");
+    header("Location: " . BASE_URL . "/index.php");
     exit;
 }
 ?>
@@ -21,7 +21,7 @@ if (!file_exists($lockFile) || $isAdmin) {
     <title>Under Maintenance | SHARE HOPE</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/share_hope/assets/css/style.css?v=2">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 

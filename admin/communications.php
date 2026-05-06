@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'super_admin'])) {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -174,7 +174,7 @@ if ($edit_id > 0) {
             <?php require_once __DIR__ . '/includes/admin_nav.php'; ?>
         </div>
 
-        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1400px;">
+        <div class="admin-main" style="flex: 1; min-width: 0; padding-left: 2.5rem; padding-right: 1.5rem; max-width: 1150px;">
             <h1 style="font-size: 1.75rem; margin: 0 0 1.5rem 0;">Communications Hub</h1>
 
             <?php if ($success): ?>
@@ -261,7 +261,7 @@ if ($edit_id > 0) {
                                 <i class="fa-solid fa-paper-plane"></i> <?= ($edit_msg && $edit_type === 'announcement') ? 'Update' : 'Post' ?>
                             </button>
                             <?php if ($edit_msg && $edit_type === 'announcement'): ?>
-                                <a href="/share_hope/admin/communications.php" class="btn btn-outline" style="flex: 1; padding: 0.6rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; text-align: center;">
+                                <a href="<?= BASE_URL ?>/admin/communications.php" class="btn btn-outline" style="flex: 1; padding: 0.6rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; text-align: center;">
                                     <i class="fa-solid fa-xmark"></i> Cancel
                                 </a>
                             <?php endif; ?>
@@ -305,7 +305,7 @@ if ($edit_id > 0) {
                                 <i class="fa-solid fa-paper-plane"></i> <?= ($edit_msg && $edit_type === 'awareness') ? 'Update' : 'Create' ?>
                             </button>
                             <?php if ($edit_msg && $edit_type === 'awareness'): ?>
-                                <a href="/share_hope/admin/communications.php" class="btn btn-outline" style="flex: 1; padding: 0.6rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; text-align: center;">
+                                <a href="<?= BASE_URL ?>/admin/communications.php" class="btn btn-outline" style="flex: 1; padding: 0.6rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; text-align: center;">
                                     <i class="fa-solid fa-xmark"></i> Cancel
                                 </a>
                             <?php endif; ?>
@@ -333,7 +333,7 @@ if ($edit_id > 0) {
                                 </div>
                                 <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;"><?= date('M j, H:i', strtotime($msg['created_at'])) ?></div>
                                 <div style="display: flex; gap: 0.4rem;">
-                                    <a href="/share_hope/admin/communications.php?edit=<?= $msg['id'] ?>&type=<?= $msg['source'] ?>" class="btn" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.7rem; background: var(--primary); color: white; border: none; cursor: pointer; border-radius: var(--radius-sm); text-decoration: none; text-align: center;">
+                                    <a href="<?= BASE_URL ?>/admin/communications.php?edit=<?= $msg['id'] ?>&type=<?= $msg['source'] ?>" class="btn" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.7rem; background: var(--primary); color: white; border: none; cursor: pointer; border-radius: var(--radius-sm); text-decoration: none; text-align: center;">
                                         <i class="fa-solid fa-pen"></i> Edit
                                     </a>
                                     <form method="POST" style="flex: 1; display: flex;" onsubmit="return confirm('Permanently delete this item?');">

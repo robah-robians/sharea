@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'donor') {
-    header("Location: /share_hope/login.php");
+    header("Location: " . BASE_URL . "/login.php");
     exit;
 }
 require_once __DIR__ . '/../includes/header.php';
@@ -100,7 +100,7 @@ $monthly_data = $stmt->fetchAll();
                     <h4 style="margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-main);">Donation History</h4>
                     <h5 style="margin: 0 0 1.5rem 0; font-size: 1.2rem; font-weight: 600; color: var(--text-muted);">No Donations Yet</h5>
                     <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1rem; line-height: 1.6; max-width: 400px; margin-left: auto; margin-right: auto;">Start making a difference by supporting campaigns you care about.</p>
-                    <a href="/share_hope/campaigns.php" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 600;">
+                    <a href="<?= BASE_URL ?>/campaigns.php" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 600;">
                         <i class="fa-solid fa-search"></i> Find Campaigns
                     </a>
                 </div>
@@ -118,7 +118,7 @@ $monthly_data = $stmt->fetchAll();
                             
                             <div style="flex: 1;">
                                 <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">
-                                    <a href="/share_hope/campaigns.php?id=<?= $donation['campaign_id'] ?>" style="color: var(--text); text-decoration: none;">
+                                    <a href="<?= BASE_URL ?>/campaigns.php?id=<?= $donation['campaign_id'] ?>" style="color: var(--text); text-decoration: none;">
                                         <?= h($donation['campaign_title']) ?>
                                     </a>
                                 </h4>
@@ -151,7 +151,7 @@ $monthly_data = $stmt->fetchAll();
                                     </span>
                                 </div>
                                 <?php if($donation['status'] === 'completed'): ?>
-                                    <a href="/share_hope/donation_receipt.php?id=<?= $donation['id'] ?>" class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                                    <a href="<?= BASE_URL ?>/donation_receipt.php?id=<?= $donation['id'] ?>" class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem;">
                                         <i class="fa-solid fa-download"></i> Receipt
                                     </a>
                                 <?php endif; ?>
